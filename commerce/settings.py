@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-530$by62yh(^(d08w!94kmog^7natqvhz52!tjcsja(l+d6k(2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['siegs-domain.onrender.com']
+ALLOWED_HOSTS = ['siegs-domain.onrender.com','127.0.0.1']
 
 # Application definition
 
@@ -126,7 +126,8 @@ EMAIL_HOST_PASSWORD = 'bogz uojg kfex rbfc'
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = ''
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'

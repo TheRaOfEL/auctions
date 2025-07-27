@@ -1,0 +1,155 @@
+/* General Reset */
+* {
+    box-sizing: border-box;
+}
+
+/* Body padding to shift content below the navbar */
+body {
+    padding-top: 80px; /* Adjust this based on the navbar height */
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent or solid color */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure navbar stays above other elements */
+    padding: 10px 20px; /* Ensure there's padding inside the navbar */
+}
+
+/* Messages Styling */
+.messages {
+    margin-top: 20px; /* Adjust this based on your layout */
+    z-index: 1; /* Ensure messages are below navbar */
+}
+
+/* Additional Styles */
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.explore {
+    padding: 10px 20px !important;
+}
+
+.card-props {
+    background-image: url('../images/cars.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 15px;
+}
+
+.auction, .auction-photo img, .auction-time {
+    border-radius: 15px;
+}
+
+.auction-photo:hover {
+    transform: scale(1.05);
+}
+
+.auction-photo {
+    transition-duration: 1.5s;
+    transition-property: all;
+}
+
+.auction-time {
+    transform: translateY(-50%);
+    width: 65%;
+    position: relative;
+}
+
+.testimonial {
+    background: #fff;
+    box-shadow: 5px 2px 20px rgb(0 0 0 / 4%);
+}
+
+.test-desc img, .upcoming-author img {
+    border-radius: 50%;
+}
+
+.upcoming-timer div {
+    border: 1px solid white;
+    border-radius: 12px;
+    padding: 10px;
+    transform: scale(.9);
+}
+
+.upcoming-timer {
+    margin-top: -60px;
+    position: relative;
+}
+
+.upcoming-item {
+    border-radius: 15px;
+}
+
+.trustees {
+    background: rgba(249, 57, 95, .1);
+}
+
+.footer {
+    margin-top: 150px !important;
+}
+
+.signup-form, .login-form {
+    box-shadow: 5px 2px 20px rgb(0 0 0 / 4%);
+}
+
+#countdown {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e74c3c; /* Red color for urgency */
+}
+
+.bg-gradient {
+    background: linear-gradient(to bottom right, #ff7e5f, #feb47b); /* Customize gradient colors */
+}
+
+.auction-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.action-btns i:hover {
+    transform: scale(1.1);
+    color: #ff6347; /* Change to any hover color you like */
+}
+
+/* Add Gradient to the header background */
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Customize gradient colors */
+}
+
+/* Hover Effect for Cards */
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Custom Button Hover Effects */
+.btn-danger:hover {
+    background-color: #d9534f;
+    color: white;
+}
+
+.btn-outline-danger:hover {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+/* Light Mode Styles */
+.header-section {
+    background-color: #dc3545; /* Light background (Red) */
+    color: white; /* White text for light mode */
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] .header-section {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light gray text for dark mode */
+}
+x
