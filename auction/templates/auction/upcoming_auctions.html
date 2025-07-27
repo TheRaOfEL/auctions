@@ -1,0 +1,41 @@
+{% extends 'main.html' %}
+{% block content %}
+    <!-- Upcoming Auctions Header Section -->
+    <div class="container-fluid bg-info py-4 text-white" style="padding-top: 60px; height: 150px;">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h1 class="display-4 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3 text-shadow">Upcoming Auctions</h1>
+                <p class="fs-4 ms-0 ps-0 ms-md-5 ps-md-5">Get ready to place your bids for upcoming items!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Auctions List Section -->
+    <div class="container mt-5">
+        <div class="row">
+            {% for auction in upcoming_auctions %}
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-light rounded">
+                        <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ auction.name }}</h5>
+                            <p class="card-text">{{ auction.description|slice:":150" }}...</p>
+                            <p class="card-text"><strong>Starting Bid:</strong> ${{ auction.starting_bid }}</p>
+                            <p class="card-text"><strong>Start Date:</strong> {{ auction.start_at|date:"F j, Y" }}</p>
+                            <p class="card-text"><strong>End Date:</strong> {{ auction.end_at|date:"F j, Y" }}</p>
+
+                            <!-- Time Left Countdown -->
+                            <p class="card-text">
+                                <strong>{{ auction.time_left_display }}</strong>
+                            </p>
+
+                            <a href="{% url 'upcoming_auction_detail' auction.id %}" class="btn btn-primary w-100">View Auction</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No upcoming auctions at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

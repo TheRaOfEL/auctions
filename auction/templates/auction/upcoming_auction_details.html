@@ -1,0 +1,70 @@
+<!-- upcoming_auction_detail.html -->
+{% extends 'main.html' %}
+
+{% block content %}
+    <!-- Header Section -->
+    <div class="container-fluid bg-info py-5 text-white" style="padding-top: 120px;">
+        <!-- Added padding-top to prevent overlap with fixed navbar -->
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <h1 class="display-5 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3">Upcoming Auctions</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auction Details Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ auction.name }}</h5>
+                        <p class="card-text">{{ auction.description }}</p>
+                        <p class="card-text"><strong>Starting Bid:</strong> ${{ auction.starting_bid }}</p>
+                        <p class="card-text"><strong>Start Date:</strong> {{ auction.start_at|date:"F j, Y" }}</p>
+                        <p class="card-text"><strong>End Date:</strong> {{ auction.end_at|date:"F j, Y" }}</p>
+
+                        <h5 class="mt-4">Time Left to Start:</h5>
+                        <p class="card-text">
+                        <p class="card-text">
+                            {% if time_left_minutes > 0 %}
+                                <strong id="countdown">{{ time_left_days }} days {{ time_left_hours }}
+                                    hours {{ time_left_minutes }} minutes</strong>
+                            {% else %}
+                                <strong>The auction is now live!</strong>
+                            {% endif %}
+                        </p>
+                        {% if time_left_minutes <= 0 %}
+                            <a href="{% url 'auction_detail' pk=auction.id %}" class="btn btn-primary">Go to
+                                Auction</a>
+                        {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateCountdown() {
+            const countdownElement = document.getElementById("countdown");
+            const endTime = new Date("{{ auction.start_at|date:"Y-m-d H:i:s" }}").getTime();
+            const currentTime = new Date().getTime();
+            const timeLeft = endTime - currentTime;
+
+            if (timeLeft <= 0) {
+                countdownElement.innerHTML = "The auction has started!";
+                clearInterval(timerInterval);
+            } else {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                countdownElement.innerHTML = `${days} days ${hours} hours ${minutes} minutes`;
+            }
+        }
+
+        const timerInterval = setInterval(updateCountdown, 1000);
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <!-- Header Section -->
+    <div class="container-fluid bg-danger text-white py-5" style="padding-top: 60px;">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-5 fw-bold">🔐 Login</h1>
+                <p class="lead">Access your account and start bidding smartly!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Form Section -->
+    <main class="my-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="card-body p-5">
+                            <h3 class="text-center mb-4 fw-bold">Welcome Back 👋</h3>
+                            <p class="text-center text-muted mb-4">
+                                Don’t have an account?
+                                <a href="{% url 'register' %}" class="text-danger fw-semibold">Sign up here!</a>
+                            </p>
+
+                            <form method="POST" novalidate>
+                                {% csrf_token %}
+
+                                <!-- Username -->
+                                <div class="form-floating mb-4">
+                                    <input type="text" name="username" class="form-control" id="username"
+                                           placeholder="Username" required>
+                                    <label for="username">Username</label>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="form-floating mb-4">
+                                    <input type="password" name="password" class="form-control" id="password"
+                                           placeholder="Password" required>
+                                    <label for="password">Password</label>
+                                </div>
+                                <div class="auth_actions">
+                                   <a href="{% url 'reset_password' %}" class="text-danger fw-semibold">Forget Password?</a>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success btn-lg rounded-3">
+                                        🚀 Login
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <style>
+        .form-control {
+            border-radius: 12px;
+        }
+
+        .card {
+            border-radius: 18px;
+        }
+
+        .btn-success {
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-success:hover {
+            transform: scale(1.02);
+            background-color: #157347;
+        }
+    </style>
+
+{% endblock %}

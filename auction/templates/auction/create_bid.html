@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg rounded-4 border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 fw-bold">💰 Place Your Bid</h2>
+                    <hr class="mb-4">
+
+                    <!-- Auction Listing Preview -->
+                    <div class="text-center mb-4">
+                        <img src="{{ auction.image.url }}" class="img-fluid rounded-3 shadow-sm mb-3" alt="Auction Image" style="max-width: 100%; max-height: 350px;">
+                        <h4 class="fw-semibold">{{ auction.name }}</h4>
+                        <p class="text-muted fst-italic">{{ auction.description }}</p>
+                        <p><strong>Starting Price:</strong> ${{ auction.starting_bid }}</p>
+                        <p><strong>Current Highest Bid:</strong> ${{ highest_bid.amount }}</p>
+                        <p><strong>Seller:</strong> {{ auction.owner }}</p>
+                    </div>
+
+                    <!-- Bid Form -->
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="form-floating mb-4">
+                            <input 
+                                type="number" 
+                                name="amount" 
+                                id="id_amount" 
+                                class="form-control" 
+                                placeholder="Enter bid amount" 
+                                min="{{ highest_bid.amount }}" 
+                                required>
+                            <label for="id_amount">Enter Your Bid ($)</label>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg rounded-3">
+                                🚀 Submit Bid
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a href="{% url 'auction_detail' auction.id %}" class="btn btn-outline-secondary btn-sm">
+                                ← Back to Auction
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

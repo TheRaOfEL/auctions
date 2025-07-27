@@ -1,0 +1,65 @@
+{% load static %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top fs-6">
+    <div class="container-fluid px-4">
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'images/header-logo2.png' %}" alt="Logo" height="40">
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Content -->
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+
+            <!-- Center Nav Links -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item mx-2">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'homepage' %}active{% endif %}"
+                       href="{% url 'homepage' %}">Home</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{% url 'active_auctions' %}">Active Auctions</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{% url 'upcoming_auctions' %}">Upcoming Auctions</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{% url 'my_watchlist' %}">Watch List</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="{% url 'create_auction' %}">Create Auction</a>
+                </li>
+
+                <!-- Dropdown Menu -->
+                <li class="nav-item dropdown mx-2">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">Others</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                        <li><a class="dropdown-item" href="{% url 'register' %}">Signup</a></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="btn btn-sm btn-outline-dark ms-2 d-flex align-items-center gap-1" id="darkModeToggle"
+                    onclick="toggleDarkMode()">
+                <i class="fa-solid fa-moon" id="modeIcon"></i>
+                <span id="modeText">Dark Mode</span>
+            </button>
+
+            <!-- Dashboard Button -->
+            <div class="d-flex">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-danger ms-lg-3">My Dashboard</a>
+            </div>
+
+
+        </div>
+    </div>
+</nav>

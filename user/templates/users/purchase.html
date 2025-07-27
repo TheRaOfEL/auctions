@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<!-- Header Section -->
+<div class="container-fluid bg-dark py-5 text-white" style="padding-top: 60px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+            <h1 class="display-4 fw-bold">📝 My Bids</h1>
+            <p class="lead mt-2">Track the status of your placed bids</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            {% if bids_with_status %}
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <h3 class="mb-4 fw-semibold">Your Bid History</h3>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Auction</th>
+                                        <th scope="col">Your Bid</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bid in bids_with_status %}
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td>{{ bid.bid.auction.name }}</td>
+                                            <td class="fw-bold text-primary">${{ bid.bid.amount }}</td>
+                                            <td>
+                                                {% if bid.status == 'Won' %}
+                                                    <span class="badge bg-success">Won</span>
+                                                {% elif bid.status == 'Lost' %}
+                                                    <span class="badge bg-danger">Lost</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ bid.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'auction_detail' bid.bid.auction.id %}" class="btn btn-outline-primary btn-sm">
+                                                    View Details
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="alert alert-info text-center" role="alert">
+                    <h5 class="mb-0">You haven’t placed any bids yet!</h5>
+                    <p class="mb-0">Explore auctions and start bidding now 🚀</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <!-- Header Section -->
+    <div class="container-fluid bg-danger py-5 text-white">
+        <div class="row pt-5">
+            <div class="col-12 col-lg-10">
+                <h1 class="display-5 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3">Edit Your Profile</h1>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="row py-5 justify-content-center">
+                <div class="col-10 col-md-6 signup-form px-5 py-2">
+                    <div class="form-head text-center mb-5">
+                    </div>
+                    <div class="form-body">
+                        <form method="POST" action="{% url 'edit_profile' %}" class="form auth__form"
+                              enctype="multipart/form-data">
+                            <div class="vstack gap-3 m-0 p-0">
+                                <div class="names d-grid gap-4">
+                                    {% csrf_token %}
+                                    {% for field in form %}
+                                        <div class="form__field">
+                                            <label for="formInput#text">{{ field.label }} </label>
+                                            {{ field }}
+                                        </div>
+                                    {% endfor %}
+
+                                    <div class="">
+                                        <div class="auth__actions">
+                                            <input type="submit" class="w-100 btn btn-danger mt-1" value="Save Profile">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

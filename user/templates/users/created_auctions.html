@@ -1,0 +1,72 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Header Section -->
+    <div class="container-fluid bg-dark py-5 text-white" style="padding-top: 60px;">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="display-4 fw-bold">📦 My Auctions</h1>
+                <p class="lead">Manage and track your listed items</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auctions Grid -->
+    <div class="container my-5">
+        {% if auctions %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for auction in auctions %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm position-relative">
+                            <div class="position-relative">
+                                <img src="{{ auction.image.url }}" class="card-img-top"
+                                     alt="{{ auction.name }}"
+                                     style="height: 200px; object-fit: cover; border-top-left-radius: .5rem;
+                                     border-top-right-radius: .5rem;">
+                                <div class="auction-status
+    {% if auction.is_active %}bg-success
+    {% elif auction.is_upcoming %}bg-warning
+    {% else %}bg-secondary{% endif %}">
+                                    <p class="status-text">
+                                        {% if auction.is_active %}
+                                            Active
+                                        {% elif auction.is_upcoming %}
+                                            Not Yet Started
+                                        {% else %}
+                                            Ended
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class=" card-body d-flex flex-column">
+                                <h5 class="card-title">{{ auction.name }}</h5>
+                                <p class="card-text text-muted small">
+                                    {{ auction.description|truncatechars:100 }}
+                                </p>
+                                <p class="fw-semibold mb-2">Starting Bid: ₦{{ auction.starting_bid }}</p>
+                                {% if auction.is_upcoming %}
+                                    <a href="{% url 'upcoming_auction_detail' auction.id %}"
+                                       class="btn btn-outline-warning mt-auto">View Auction</a>
+                                {% else %}
+                                    <a href="{% url 'auction_detail' auction.id %}"
+                                       class="btn btn-outline-primary mt-auto">View Auction</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                <h5 class="mb-2">No Auctions Yet</h5>
+                <p class="mb-0">You haven’t created any auctions. <a class="fw-bold text-danger"
+                                                                     href="{% url 'create_auction' %}">Create one
+                    now!</a></p>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

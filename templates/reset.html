@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin: 50px auto; padding: 2rem; background-color: #fdfdfd; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+
+  <h2 class="text-center mb-4">🔐 Set a New Password</h2>
+
+  {% if validlink %}
+    <p class="text-muted text-center mb-4">
+      Please enter your new password twice so we can verify you typed it correctly.
+    </p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group mb-3">
+        {{ form.new_password1.label_tag }}
+        {{ form.new_password1 }}
+        {% if form.new_password1.errors %}
+          <small class="text-danger">{{ form.new_password1.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <div class="form-group mb-3">
+        {{ form.new_password2.label_tag }}
+        {{ form.new_password2 }}
+        {% if form.new_password2.errors %}
+          <small class="text-danger">{{ form.new_password2.errors.0 }}</small>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Reset Password</button>
+    </form>
+
+  {% else %}
+    <div class="alert alert-danger text-center">
+      The password reset link is invalid, possibly because it has already been used or expired. <br><br>
+      <a href="{% url 'password_reset' %}" class="btn btn-outline-primary mt-3">Request a new reset link</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock content %}
