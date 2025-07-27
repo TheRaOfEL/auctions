@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: siegs-commerce
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn commerce.wsgi:application"
+    staticPublishPath: staticfiles
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: commerce.settings
+      - key: PYTHON_VERSION
+        value: 3.13.4
