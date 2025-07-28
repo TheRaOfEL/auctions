@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-530$by62yh(^(d08w!94kmog^7natqvhz52!tjcsja(l+d6k(2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['siegs-domain.onrender.com', '127.0.0.1', 'sieg-auction.up.railway.app']
 

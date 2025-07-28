@@ -2,22 +2,30 @@ import uuid
 
 from django.db import models
 from django.utils import timezone
-
+from datetime import timedelta
 from user.models import Profile
 
 
 # Create your models here.
 
+# Define a named function
+def default_auction_end_time():
+    return timezone.now() + timedelta(days=7)
+
 class AuctionListing(models.Model):
     owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
-    description = models.TextField(max_length=500, null=True, blank=True)
+    description = models.TextField(max_length=500, blank=False, null=True)
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)  # starting price
-    image = models.ImageField(blank=False, null=True, default='images/default_background.jpg', upload_to='images/')
-    category = models.CharField(max_length=100, null=True, blank=True)  # electronics etc
+    image = models.ImageField(blank=False, null=True, upload_to='images/')
+    category = models.CharField(max_length=100, null=True, blank=False)  # electronics etc
     created_at = models.DateTimeField(auto_now_add=True)
-    start_at = models.DateTimeField(null=True, blank=True, default=timezone.now)
-    end_at = models.DateTimeField(null=True, blank=True)  # optional
+    start_at = models.DateTimeField(null=False, blank=False, default=timezone.now)
+    end_at = models.DateTimeField(
+        null=False,
+        blank=False,
+        default=default_auction_end_time
+    )
     completed = models.BooleanField(default=False)  # To mark if auction is completed
     is_ongoing = models.BooleanField(default=True)
     sold_to = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='purchases')

@@ -97,7 +97,7 @@ def auction_detail(request, pk):
     auction = AuctionListing.objects.get(id=pk)
 
     # Check if auction has ended and mark it as completed
-    if auction.end_at <= timezone.now() and not auction.completed:
+    if auction.end_at is not None and auction.end_at <= timezone.now() and not auction.completed:
         highest_bid = auction.bids.order_by('-amount').first()
         if highest_bid:
             auction.completed = True
