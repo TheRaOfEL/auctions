@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "commerce.settings"
+    }
+  },
+  "deploy": {
+    "startCommand": "gunicorn commerce.wsgi"
+  }
+}
