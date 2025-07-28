@@ -59,7 +59,7 @@ def register_user(request):
             user.save()
 
             login(request, user)
-            return redirect('dashboard')
+            return redirect('edit_profile')
         else:
             messages.success(request, 'An error occurred. Please try again!')
 
