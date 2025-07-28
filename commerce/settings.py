@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'auction.apps.AuctionConfig',
-    'user.apps.UserConfig'
+    'user.apps.UserConfig',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -160,4 +162,12 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'success',
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',  # ← this maps error to Bootstrap’s red class
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('duzm04tcl'),
+    'API_KEY': os.getenv('291292361858347'),
+    'API_SECRET': os.getenv('Rr-xf8muwlXMRIccYCjNwJexxvU'),
 }
