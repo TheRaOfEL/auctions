@@ -10,8 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-import cloudinary
-import cloudinary_storage
+
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
@@ -26,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-530$by62yh(^(d08w!94kmog^7natqvhz52!tjcsja(l+d6k(2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['siegs-domain.onrender.com', '127.0.0.1', 'sieg-auction.up.railway.app']
 
@@ -52,8 +51,7 @@ INSTALLED_APPS = [
 
     'auction.apps.AuctionConfig',
     'user.apps.UserConfig',
-    'cloudinary',
-    'cloudinary_storage',
+
 ]
 
 MIDDLEWARE = [
@@ -166,10 +164,4 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',  # ← this maps error to Bootstrap’s red class
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('duzm04tcl'),
-    'API_KEY': os.getenv('291292361858347'),
-    'API_SECRET': os.getenv('Rr-xf8muwlXMRIccYCjNwJexxvU'),
-}
+#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
