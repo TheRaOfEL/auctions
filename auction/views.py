@@ -198,7 +198,7 @@ def place_bid(request, pk):
         min_valid_bid = highest_bid.amount if highest_bid else auction.starting_bid
         if bid_amount < min_valid_bid:
             messages.error(request, f"Your bid must be at least ${min_valid_bid}.")
-            return redirect('auction_detail', pk=auction.id)
+            return redirect('place_bid', pk=auction.id)
 
         # Save new bid
         Bid.objects.create(
