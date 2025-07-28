@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
+import cloudinary
+import cloudinary_storage
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
