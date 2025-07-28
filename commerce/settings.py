@@ -10,10 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
-
+import dj_database_url
 from pathlib import Path
-
+from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+
+
+load_dotenv()  # load from .env
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -164,4 +176,3 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',  # ← this maps error to Bootstrap’s red class
 }
 
-#DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
