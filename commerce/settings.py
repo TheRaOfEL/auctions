@@ -9,23 +9,22 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
 import dj_database_url
+import os
+
 from pathlib import Path
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
-
 
 load_dotenv()  # load from .env
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=os.getenv("DATABASE_URL"),  # from your .env
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False  # Set to True in production
     )
 }
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,11 +40,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['siegs-domain.onrender.com', '127.0.0.1', 'sieg-auction.up.railway.app']
 
-
 CSRF_TRUSTED_ORIGINS = [
     'https://sieg-auction.up.railway.app',
 ]
-
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
@@ -63,6 +60,7 @@ INSTALLED_APPS = [
 
     'auction.apps.AuctionConfig',
     'user.apps.UserConfig',
+    'dj_database_url'
 
 ]
 
@@ -158,9 +156,6 @@ STATICFILES_DIRS = [
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-
-
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # Default primary key field type
@@ -175,4 +170,3 @@ MESSAGE_TAGS = {
     messages.WARNING: 'warning',
     messages.ERROR: 'danger',  # ← this maps error to Bootstrap’s red class
 }
-
