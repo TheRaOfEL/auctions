@@ -136,8 +136,8 @@ EMAIL_HOST_PASSWORD = 'bogz uojg kfex rbfc'
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = '/images/'
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'auction/media')
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
@@ -145,7 +145,7 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

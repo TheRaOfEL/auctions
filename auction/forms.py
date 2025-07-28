@@ -9,8 +9,8 @@ class AuctionForm(forms.ModelForm):
         model = AuctionListing
         fields = ['name', 'description', 'starting_bid', 'image', 'category', 'start_at', 'end_at']
         widgets = {
-            'start_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'start_at': forms.DateTimeInput(attrs={'type': 'datetime-local', 'step': '1'}),
+            'end_at': forms.DateTimeInput(attrs={'type': 'datetime-local', 'step': '1'}),
         }
 
 

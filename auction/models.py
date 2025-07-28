@@ -17,7 +17,7 @@ class AuctionListing(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=500, blank=False, null=True)
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)  # starting price
-    image = models.ImageField(blank=False, null=True, upload_to='images/')
+    image = models.ImageField(blank=False, null=True, upload_to='auction_images/')
     category = models.CharField(max_length=100, null=True, blank=False)  # electronics etc
     created_at = models.DateTimeField(auto_now_add=True)
     start_at = models.DateTimeField(null=False, blank=False, default=timezone.now)
