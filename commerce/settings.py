@@ -28,6 +28,15 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['siegs-domain.onrender.com', '127.0.0.1', 'sieg-auction.up.railway.app']
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://sieg-auction.up.railway.app',
+]
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 # Application definition
 
 INSTALLED_APPS = [
