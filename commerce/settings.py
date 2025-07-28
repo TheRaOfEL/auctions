@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-530$by62yh(^(d08w!94kmog^7natqvhz52!tjcsja(l+d6k(2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['siegs-domain.onrender.com','127.0.0.1', 'sieg-auction.up.railway.app']
+ALLOWED_HOSTS = ['siegs-domain.onrender.com', '127.0.0.1', 'sieg-auction.up.railway.app']
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -114,7 +115,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -132,6 +132,9 @@ MEDIA_URL = '/images/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
