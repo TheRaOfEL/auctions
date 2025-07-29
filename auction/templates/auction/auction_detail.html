@@ -1,110 +1,179 @@
 {% extends 'main.html' %}
 {% block content %}
-        <!-- Header Section with Adjusted Padding and Shorter Height -->
-    <div class="container-fluid bg-dark py-4 text-white" style="padding-top: 60px; height: 150px;">
-        <!-- Adjusted height and padding-top for a more compact header -->
-        <div class="row">
-            <div class="col-12 col-lg-10">
-                <h1 class="display-4 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3 text-shadow">Exclusive Auction</h1>
-                <p class="fs-4 ms-0 ps-0 ms-md-5 ps-md-5">Place your bids for unique items now!</p>
-            </div>
+
+<div id="flash-message" class="alert d-none text-center mx-auto" role="alert" style="max-width: 600px;"></div>
+
+<script>
+    function showFlashMessage(message, isSuccess = true) {
+    const flash = document.getElementById('flash-message');
+
+    // Set classes and content
+    flash.className = `alert alert-${isSuccess ? 'success' : 'danger'} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg text-center px-4 py-2 rounded`;
+    flash.textContent = message;
+    flash.classList.remove('d-none');
+
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        flash.classList.add('d-none');
+    }, 3000);
+}
+
+</script>
+
+
+<!-- Header Section -->
+<div class="container-fluid bg-dark py-4 text-white" style="padding-top: 60px;">
+    <div class="row">
+        <div class="col-lg-10">
+            <h1 class="display-4 fw-bold ms-md-5">Exclusive Auction</h1>
+            <p class="fs-5 ms-md-5 mb-0">Place your bids for unique items now!</p>
         </div>
     </div>
-    <div class="container mt-5 p-4">
-        <!-- Auction Details Section -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ auction.image.url }}" alt="Auction Image" class="card-img-top"
-                         style="object-fit: cover; height: 300px;">
-                    <div class="card-body text-center">
-                        <h4 class="fw-bold">{{ auction.name }}</h4>
-                        <p class="text-muted">{{ auction.description }}</p>
-                        <p class="fs-5">Starting Price: <span
-                                class="bidding-price text-success">${{ auction.starting_bid }}</span></p>
-                        <p class="fs-5">Highest Bid: <span
-                                class="bidding-price text-warning">${{ highest_bid.amount }}</span></p>
-                    </div>
+</div>
+
+<!-- Auction Info Section -->
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Auction Image & Basic Info -->
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+                <img src="{{ auction.image.url }}" alt="Auction Image" class="card-img-top"
+                     style="height: 300px; object-fit: cover;">
+                <div class="card-body text-center">
+                    <h4 class="fw-bold">{{ auction.name }}</h4>
+                    <p class="text-muted">{{ auction.description }}</p>
+                    <p class="fs-5">Category: <span class="text-primary">{{ auction.get_category_display }}</span></p>
+                    <p class="fs-5">Starting Price: <span
+                            class="bidding-price text-success">${{ auction.starting_bid }}</span></p>
+                    <p class="fs-5">Highest Bid: <span
+                            class="bidding-price text-warning">${{ highest_bid.amount }}</span></p>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-6">
-                <div class="card shadow-lg rounded-lg p-4 bg-light">
-                    <h5 class="fw-bold">Auction Status:</h5>
-                    <div class="text-center">
-                        {% if auction_status == 'upcoming' %}
-                            <div class="alert alert-info">
-                                <strong>Upcoming Auction!</strong>
-                                <p>Time left to start: <strong>{{ time_left_days }} days {{ time_left_hours }}
-                                    hours {{ time_left_minutes }} minutes</strong></p>
-                            </div>
-                        {% elif auction_status == 'live' %}
-                            <div class="alert alert-success">
-                                <strong>Auction Live Now!</strong>
-                                <p>Time left to end: <strong id="live-countdown">{{ time_left_days }}
-                                    days {{ time_left_hours }} hours {{ time_left_minutes }} minutes</strong></p>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-danger">
-                                <strong>The auction has ended!</strong>
-                            </div>
-                        {% endif %}
+        <!-- Auction Status & Actions -->
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4 p-4 bg-light">
+                <h5 class="fw-bold text-center mb-3">Auction Status</h5>
+                <div class="text-center">
+                    {% if auction_status == 'upcoming' %}
+                    <div class="alert alert-info">
+                        <strong>Upcoming Auction!</strong>
+                        <p class="mb-0">Starts in: <strong>{{ time_left_days }}d {{ time_left_hours }}h {{
+                            time_left_minutes }}m</strong></p>
                     </div>
+                    {% elif auction_status == 'live' %}
+                    <div class="alert alert-success">
+                        <strong>Auction Live Now!</strong>
+                        <p>Time left to end: <strong id="live-countdown">{{ time_left_days }} days {{ time_left_hours }}
+                            hours {{ time_left_minutes }} minutes</strong></p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <strong>The auction has ended.</strong>
+                    </div>
+                    {% endif %}
+                </div>
 
-                    <div class="d-flex flex-column align-items-center mt-4">
-                        <a href="{% url 'place_bid' auction.id %}">
-                            <button type="submit" class="btn btn-danger w-100 py-2 my-2">Place Your Bid</button>
-                        </a>
-                        <form method="post" action="{% url 'toggle_watchlist' auction.id %}" class="mt-3 w-100">
-                            {% csrf_token %}
+                <!-- Buttons -->
+                <div class="mt-4 d-grid gap-3">
+                    <a href="{% url 'place_bid' auction.id %}" class="btn btn-danger py-2">Place Your Bid</a>
+
+                    <div class="d-grid gap-3 mt-3">
+                        <button
+                                class="btn btn-sm {% if user.profile in auction.watchers.all %}btn-danger{% else %}btn-outline-secondary{% endif %}"
+                                data-auction-id="{{ auction.id }}"
+                                onclick="toggleWatchlist(this)">
                             {% if user.profile in auction.watchers.all %}
-                                <button type="submit" class="btn btn-outline-danger w-100 py-2">Remove from Watchlist
-                                </button>
+                            Remove from Watchlist
                             {% else %}
-                                <button type="submit" class="btn btn-outline-primary w-100 py-2">Add to Watchlist
-                                </button>
+                            Add to Watchlist
                             {% endif %}
-                        </form>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Highest Bid Section -->
-    <div class="card mt-4 shadow-lg">
-        <div class="card-header bg-dark text-white">
-            <strong>Highest Bid</strong>
+    <!-- Highest Bidder Info -->
+    <div class="card mt-5 shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white fw-bold fs-5">
+            Highest Bid Info
         </div>
         <div class="card-body">
             {% if highest_bid %}
-                <p><strong>Bidder:</strong> {{ highest_bid.bidder.user.username }}</p>
-                <p><strong>Amount:</strong> ${{ highest_bid.amount }}</p>
+            <p class="mb-2"><strong>Bidder:</strong> {{ highest_bid.bidder.user.username }}</p>
+            <p><strong>Amount:</strong> ${{ highest_bid.amount }}</p>
             {% else %}
-                <p>No bids placed yet.</p>
+            <p class="text-muted">No bids placed yet.</p>
             {% endif %}
         </div>
     </div>
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function toggleWatchlist(button) {
+    const auctionId = button.dataset.auctionId;
+
+    fetch(`/watchlist/${auctionId}/toggle/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            button.classList.toggle('text-danger', data.in_watchlist);
+            button.classList.toggle('text-secondary', !data.in_watchlist);
+            showFlashMessage(data.message, data.in_watchlist);
+        } else {
+            showFlashMessage("An error occurred.", false);
+        }
+    })
+    .catch(() => {
+        showFlashMessage("An error occurred. Please try again.", false);
+    });
+}
+</script>
 
 {% endblock %}
 
+<!-- Countdown Script -->
 <script>
-    // JavaScript to handle live countdown
     function updateLiveCountdown() {
-        const countdownElement = document.getElementById("live-countdown");
-        const endTime = new Date("{{ auction.end_at|date:'Y-m-d H:i:s' }}").getTime();
-        const currentTime = new Date().getTime();
-        const timeLeft = endTime - currentTime;
+        const el = document.getElementById("live-countdown");
+        const end = new Date("{{ auction.end_at|date:'Y-m-d H:i:s' }}").getTime();
+        const now = new Date().getTime();
+        const diff = end - now;
 
-        if (timeLeft <= 0) {
-            countdownElement.innerHTML = "The auction has ended!";
+        if (diff <= 0) {
+            el.innerHTML = "The auction has ended.";
             clearInterval(timerInterval);
-        } else {
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            countdownElement.innerHTML = `${days} days ${hours} hours ${minutes} minutes`;
+            return;
         }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        el.innerHTML = `${d}d ${h}h ${m}m`;
     }
 
     const timerInterval = setInterval(updateLiveCountdown, 1000);

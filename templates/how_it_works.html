@@ -1,0 +1,70 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-5 mt-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-danger animate__animated animate__fadeInDown">How It Works</h1>
+            <p class="text-muted">Follow these simple steps to get started with Siegs Auction House.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Step 1 -->
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="p-4 shadow-sm bg-light rounded-4 h-100 animate__animated animate__fadeInUp">
+                    <div class="mb-3">
+                        <i class="fas fa-user-plus fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="fw-semibold">1. Create an Account</h5>
+                    <p class="small text-muted">Sign up with your email to start bidding and listing your items.</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="p-4 shadow-sm bg-light rounded-4 h-100 animate__animated animate__fadeInUp">
+                    <div class="mb-3">
+                        <i class="fas fa-gavel fa-3x text-success"></i>
+                    </div>
+                    <h5 class="fw-semibold">2. Browse or List Auctions</h5>
+                    <p class="small text-muted">Find items to bid on or list your products for others to bid.</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="p-4 shadow-sm bg-light rounded-4 h-100 animate__animated animate__fadeInUp">
+                    <div class="mb-3">
+                        <i class="fas fa-hand-paper fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="fw-semibold">3. Place Bids</h5>
+                    <p class="small text-muted">Join the excitement by placing bids on your favorite items.</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="col-md-6 col-lg-3 text-center">
+                <div class="p-4 shadow-sm bg-light rounded-4 h-100 animate__animated animate__fadeInUp">
+                    <div class="mb-3">
+                        <i class="fas fa-trophy fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="fw-semibold">4. Win and Pay</h5>
+                    <p class="small text-muted">If you win, complete your payment and enjoy your purchase.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'active_auctions' %}" class="btn btn-danger px-4 py-2">Start Bidding Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- Font Awesome (for icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<!-- Animate.css (for fade-in animations) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+{% endblock %}

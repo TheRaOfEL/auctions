@@ -1,46 +1,60 @@
 {% extends 'main.html' %}
-
 {% block content %}
 
-    <!-- Header Section -->
-    <div class="container-fluid bg-danger py-5 text-white">
-        <div class="row pt-5">
-            <div class="col-12 col-lg-10">
-                <h1 class="display-5 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3">Edit Your Profile</h1>
-            </div>
+<!-- Header -->
+<div class="container-fluid bg-dark text-white py-5" style="padding-top: 60px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+            <h1 class="display-4 fw-bold">Edit Your Profile</h1>
+            <p class="lead mt-2">Update your personal details to keep your account current ✨</p>
         </div>
     </div>
+</div>
 
-    <main>
-        <div class="container">
-            <div class="row py-5 justify-content-center">
-                <div class="col-10 col-md-6 signup-form px-5 py-2">
-                    <div class="form-head text-center mb-5">
-                    </div>
-                    <div class="form-body">
-                        <form method="POST" action="{% url 'edit_profile' %}" class="form auth__form"
-                              enctype="multipart/form-data">
-                            <div class="vstack gap-3 m-0 p-0">
-                                <div class="names d-grid gap-4">
-                                    {% csrf_token %}
-                                    {% for field in form %}
-                                        <div class="form__field">
-                                            <label for="formInput#text">{{ field.label }} </label>
-                                            {{ field }}
-                                        </div>
-                                    {% endfor %}
+<!-- Edit Form Card -->
+<main>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0 hover-shadow">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4 fw-semibold text-center text-dark">Profile Information</h4>
+                        <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
 
-                                    <div class="">
-                                        <div class="auth__actions">
-                                            <input type="submit" class="w-100 btn btn-danger mt-1" value="Save Profile">
-                                        </div>
-                                    </div>
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger small mt-1">{{ field.errors|join:", " }}</div>
+                                    {% endif %}
                                 </div>
+                            {% endfor %}
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-dark btn-lg rounded-pill mt-3">
+                                    <i class="bi bi-save2 me-2"></i>Save Changes
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
+
+<!-- Style -->
+<style>
+.hover-shadow:hover {
+    box-shadow: 0 0 20px rgba(0,0,0,0.15) !important;
+    transform: translateY(-3px);
+    transition: 0.3s ease;
+}
+</style>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 {% endblock %}

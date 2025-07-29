@@ -2,92 +2,142 @@
 {% load static %}
 
 {% block content %}
-<div class="bg-exciting-animated position-relative overflow-hidden">
-    <div class="bg-gradient position-absolute top-0 start-0 w-100 h-100"></div>
+<div class="position-relative overflow-hidden">
+    <!-- Gradient Background -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-25"></div>
 
-    <div class="container position-relative z-1">
-        <h1 class="text-center text-black dark-mode-text-light py-5 fs-3 fw-bold text-uppercase letter-spacing-3">
+    <div class="container position-relative z-1 py-5">
+        <h1 class="text-center text-black dark-mode-text-light fw-bold text-uppercase letter-spacing-3 mb-4">
             Exclusive Auctions
         </h1>
 
-        <div class="row mx-0 mb-5 p-3">
+        <div class="row g-4">
             {% for auction in auctions %}
-                <div class="col-12 col-md-6 col-lg-4 mb-4">
-                    <div class="auction-card p-3 rounded-lg shadow-lg bg-light dark-mode-card position-relative">
-                        <a href="{% url 'auction_detail' auction.id %}" class="text-decoration-none">
-                            <div class="auction-photo position-relative overflow-hidden">
-                                <img src="{{ auction.image.url }}" alt="auction-1"
-                                     class="img-fluid rounded-lg"
-                                     style="height: 230px; object-fit: cover;">
-                                <div class="fw-bold auction-time text-white bg-dark dark-mode-subtle p-2 position-absolute bottom-0 start-0 end-0 text-center">
-                                    <p class="countdown mb-0" id="time-left-{{ auction.id }}">
-                                        {{ auction.time_left.days }}d {{ auction.hours_left }}h {{ auction.minutes_left }}m
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card border-0 shadow-lg h-100 bg-light dark-mode-card">
+                    <a href="{% url 'auction_detail' auction.id %}" class="text-decoration-none">
+                        <div class="position-relative">
+                            <img src="{{ auction.image.url }}" alt="Auction Image"
+                                 class="card-img-top rounded-top" style="height: 230px; object-fit: cover;">
 
-                        <div class="auction-details mt-3">
-                            <h3 class="fs-5 text-dark dark-mode-text-light">{{ auction.name }}</h3>
-
-                            <div class="auctioner my-3 d-flex justify-content-between align-items-center">
-                                <div class="user d-flex align-items-center">
-                                    {% if auction.owner.profile_picture %}
-                                        <img src="{{ auction.owner.profile_picture.url }}" alt="auction author"
-                                             class="img-fluid me-3 rounded-circle"
-                                             style="width: 45px; height: 45px;">
-                                    {% else %}
-                                        <img src="{% static 'images/client-circle4.png' %}" alt="default author"
-                                             class="img-fluid me-3 rounded-circle"
-                                             style="width: 45px; height: 45px;">
-                                    {% endif %}
-                                    <p class="m-0 text-muted dark-mode-text-muted">By <span class="fw-bold">{{ auction.owner.username }}</span></p>
-                                </div>
-                                <h4 class="text-danger fw-bold">${{ auction.starting_bid }}</h4>
-                            </div>
-
-                            <div class="auction-action d-flex align-items-center justify-content-between">
-                                <a href="{% url 'place_bid' auction.id %}" class="w-100">
-                                    <button class="btn btn-md btn-danger w-100 py-2">Place a Bid</button>
-                                </a>
-                                <div class="action-btns d-flex justify-content-between align-items-center ms-3">
-                                    <i class="fa fa-2x text-secondary dark-mode-text-muted fa-solid fa-heart me-3 cursor-pointer"></i>
-                                    <i class="fa fa-2x dark-mode-text-muted fa-solid fa-ellipsis-v cursor-pointer"></i>
-                                </div>
+                            <div class="position-absolute bottom-0 w-100 text-center bg-dark bg-opacity-75 text-white py-1">
+                                <p id="time-left-{{ auction.id }}" class="mb-0 small">
+                                    {{ auction.time_left.days }}d {{ auction.hours_left }}h {{ auction.minutes_left }}m
+                                </p>
                             </div>
                         </div>
+                    </a>
+
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <h5 class="card-title text-dark dark-mode-text-light mb-2">{{ auction.name }}</h5>
+
+                        <div class="d-flex align-items-center mb-3">
+                            {% if auction.owner.profile_picture %}
+                            <img src="{{ auction.owner.profile_picture.url }}" alt="Owner"
+                                 class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                            {% else %}
+                            <img src="{% static 'images/client-circle4.png' %}" alt="Default"
+                                 class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                            {% endif %}
+                            <span class="text-muted small dark-mode-text-muted">By <strong>{{ auction.owner.username }}</strong></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="text-danger fw-bold mb-0">${{ auction.starting_bid }}</h6>
+                            <div>
+                                <i class="fas fa-heart me-3 cursor-pointer
+                                {% if user.profile in auction.watchers.all %}text-danger{% else %}text-secondary{% endif %}"
+                                   data-auction-id="{{ auction.id }}"
+                                   onclick="toggleWatchlist(this)">
+                                </i>
+
+                                <i class="fas fa-ellipsis-v text-secondary dark-mode-text-muted cursor-pointer"></i>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'place_bid' auction.id %}" class="btn btn-danger w-100 mt-auto">
+                            Place a Bid
+                        </a>
                     </div>
                 </div>
+            </div>
 
-                <script>
-                    (function () {
-                        const endTime = new Date("{{ auction.end_at|date:'Y-m-d H:i:s' }}").getTime();
-                        const el = document.getElementById("time-left-{{ auction.id }}");
+            <script>
+                (function () {
+                    const endTime = new Date("{{ auction.end_at|date:'Y-m-d H:i:s' }}").getTime();
+                    const el = document.getElementById("time-left-{{ auction.id }}");
 
-                        function updateTimeLeft() {
-                            const now = new Date().getTime();
-                            const diff = endTime - now;
+                    function updateTimeLeft() {
+                        const now = new Date().getTime();
+                        const diff = endTime - now;
 
-                            if (diff <= 0) {
-                                el.innerHTML = "Ended";
-                                return;
-                            }
-
-                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                            el.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                        if (diff <= 0) {
+                            el.innerHTML = "Ended";
+                            return;
                         }
 
-                        updateTimeLeft();
-                        setInterval(updateTimeLeft, 1000);
-                    })();
-                </script>
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
+                        el.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    }
+
+                    updateTimeLeft();
+                    setInterval(updateTimeLeft, 1000);
+                })();
+            </script>
             {% endfor %}
         </div>
     </div>
 </div>
+
+<script>
+    function toggleWatchlist(icon) {
+        const auctionId = icon.getAttribute('data-auction-id');
+
+        fetch(`/watchlist/${auctionId}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: ''
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.in_watchlist) {
+                    icon.classList.remove('text-secondary');
+                    icon.classList.add('text-danger');
+                } else {
+                    icon.classList.remove('text-danger');
+                    icon.classList.add('text-secondary');
+                }
+                showToast(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast("An error occurred.");
+        });
+    }
+
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "position-fixed bottom-0 end-0 p-3 z-3";
+        toast.innerHTML = `
+            <div class="toast show align-items-center text-white bg-dark border-0" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
+
+
 {% endblock %}

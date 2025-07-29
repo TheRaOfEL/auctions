@@ -2,76 +2,149 @@
 {% load static %}
 
 {% block content %}
-    <!-- Header Section with Adjusted Padding and Shorter Height -->
-    <div class="container-fluid bg-dark py-4 text-white" style="padding-top: 60px; height: 150px;">
-        <!-- Adjusted height and padding-top for a more compact header -->
-        <div class="row">
-            <div class="col-12 col-lg-10">
-                <h1 class="display-4 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3 text-shadow">Your Watchlist</h1>
-                <p class="fs-4 ms-0 ps-0 ms-md-5 ps-md-5">Stay updated with the items you're interested in!</p>
-            </div>
+<!-- Watchlist Header -->
+<div class="container-fluid bg-dark text-white py-5" style="padding-top: 60px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+            <h1 class="display-5 fw-bold text-shadow mb-2">Your Watchlist</h1>
+            <p class="fs-5">Stay updated with auctions you care about</p>
         </div>
     </div>
+</div>
+
+<!-- Watchlist Items -->
+<div class="container py-5">
+    {% if watchlist %}
+    <div class="row g-4">
+        {% for auction in watchlist %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-0 rounded-4 position-relative">
+                <!-- Auction Image -->
+                <div class="overflow-hidden rounded-top-4" style="height: 200px;">
+                    <img src="{{ auction.image.url }}" class="w-100 h-100 object-fit-cover" alt="{{ auction.name }}">
+                </div>
+
+                <!-- Card Content -->
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold text-center text-truncate">{{ auction.name }}</h5>
+                    <p class="card-text small text-muted">{{ auction.description|truncatechars:100 }}</p>
+
+                    <!-- Countdown and Bid -->
+                    <div class="d-flex justify-content-between align-items-center mt-auto small">
+                        <span>₦<span class="fw-semibold text-danger">{{ auction.starting_bid }}</span></span>
+                        <span id="time-left-{{ auction.id }}" class="badge bg-dark-subtle text-dark-emphasis"></span>
 
 
-    <div class="container py-5">
-        {% if watchlist %}
-            <div class="row g-4">
-                {% for auction in watchlist %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 shadow-sm rounded-4 overflow-hidden">
-                            <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}"
-                                 style="height: 220px; object-fit: cover;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title fw-bold text-center">{{ auction.name }}</h5>
-                                <p class="card-text text-muted small">{{ auction.description|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between">
 
-                                <div class="d-flex justify-content-between align-items-center mt-3 small">
-                                    <span>Starting Bid: <span
-                                            class="text-danger fw-semibold">₦{{ auction.starting_bid }}</span></span>
-                                    <span class="countdown text-end" id="time-left-{{ auction.id }}"></span>
-                                </div>
-
-                                <a href="{% url 'auction_detail' auction.id %}"
-                                   class="btn btn-outline-danger mt-4 w-100 mt-auto">View Auction</a>
+                            <div>
+                                <i class="fas fa-heart me-3 cursor-pointer
+                                {% if user.profile in auction.watchers.all %}text-danger{% else %}text-secondary{% endif %}"
+                                   data-auction-id="{{ auction.id }}"
+                                   onclick="toggleWatchlist(this)">
+                                </i>
+                                <i class="fa fa-ellipsis-v"></i>
                             </div>
                         </div>
                     </div>
 
-                    <script>
-                        (function () {
-                            const endTime = new Date("{{ auction.end_at|date:'Y-m-d H:i:s' }}").getTime();
-                            const el = document.getElementById("time-left-{{ auction.id }}");
+                    {% if auction.is_upcoming %}
+                    <a href="{% url 'upcoming_auction_detail' auction.id %}"
+                       class="btn btn-outline-warning mt-3 w-100 rounded-pill">View Upcoming Auction</a>
+                    {% else %}
+                    <a href="{% url 'auction_detail' auction.id %}"
+                       class="btn btn-outline-danger mt-3 w-100 rounded-pill">View Auction</a>
+                    {% endif %}
 
-                            function updateTimeLeft() {
-                                const now = new Date().getTime();
-                                const diff = endTime - now;
-
-                                if (diff <= 0) {
-                                    el.innerHTML = "Ended";
-                                    return;
-                                }
-
-                                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                                el.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                            }
-
-                            updateTimeLeft();
-                            setInterval(updateTimeLeft, 1000);  // Smooth animation every second
-                        })();
-                    </script>
-                {% endfor %}
+                </div>
             </div>
-        {% else %}
-            <div class="text-center">
-                <h4 class="text-muted">You have no auctions in your watchlist.</h4>
-                <a href="{% url 'active_auctions' %}" class="btn btn-outline-primary mt-3">Browse Auctions</a>
-            </div>
-        {% endif %}
+
+            <!-- Countdown Script -->
+            <script>
+                (function () {
+                    const endTime = new Date("{{ auction.end_at|date:'c' }}").getTime();
+                    const el = document.getElementById("time-left-{{ auction.id }}");
+
+                    function updateTimeLeft() {
+                        const now = new Date().getTime();
+                        const diff = endTime - now;
+
+                        if (diff <= 0) {
+                            el.innerHTML = "Ended";
+                            el.classList.remove("bg-dark-subtle", "text-dark-emphasis");
+                            el.classList.add("bg-danger", "text-white");
+                            return;
+                        }
+
+                        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                        el.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+                    }
+
+                    updateTimeLeft();
+                    setInterval(updateTimeLeft, 1000);
+                })();
+            </script>
+        </div>
+        {% endfor %}
     </div>
+    {% else %}
+    <!-- Empty Watchlist -->
+    <div class="text-center py-5">
+        <h4 class="text-muted mb-3">Your watchlist is currently empty.</h4>
+        <a href="{% url 'active_auctions' %}" class="btn btn-outline-primary rounded-pill px-4">Browse Auctions</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function toggleWatchlist(icon) {
+        const auctionId = icon.getAttribute('data-auction-id');
+
+        fetch(`/watchlist/${auctionId}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: ''
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.in_watchlist) {
+                        icon.classList.remove('text-secondary');
+                        icon.classList.add('text-danger');
+                    } else {
+                        icon.classList.remove('text-danger');
+                        icon.classList.add('text-secondary');
+                    }
+                    showToast(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("An error occurred.");
+            });
+    }
+
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "position-fixed bottom-0 end-0 p-3 z-3";
+        toast.innerHTML = `
+            <div class="toast show align-items-center text-white bg-dark border-0" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
+
 
 {% endblock %}

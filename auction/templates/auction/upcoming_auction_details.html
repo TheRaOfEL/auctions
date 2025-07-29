@@ -1,70 +1,78 @@
-<!-- upcoming_auction_detail.html -->
 {% extends 'main.html' %}
 
 {% block content %}
-    <!-- Header Section -->
-    <div class="container-fluid bg-info py-5 text-white" style="padding-top: 120px;">
-        <!-- Added padding-top to prevent overlap with fixed navbar -->
-        <div class="row">
-            <div class="col-12 col-lg-10">
-                <h1 class="display-5 fw-bold ms-0 ps-0 ms-md-5 ps-md-5 pt-3">Upcoming Auctions</h1>
-            </div>
+<!-- Header Section -->
+<div class="container-fluid py-5 text-white" style="background: linear-gradient(135deg, #17a2b8, #0f5e7d); padding-top: 120px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+            <h1 class="display-5 fw-bold">⏳ Upcoming Auction Details</h1>
+            <p class="fs-5">Everything you need to know before the bidding starts!</p>
         </div>
     </div>
+</div>
 
-    <!-- Auction Details Section -->
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ auction.name }}</h5>
-                        <p class="card-text">{{ auction.description }}</p>
-                        <p class="card-text"><strong>Starting Bid:</strong> ${{ auction.starting_bid }}</p>
-                        <p class="card-text"><strong>Start Date:</strong> {{ auction.start_at|date:"F j, Y" }}</p>
-                        <p class="card-text"><strong>End Date:</strong> {{ auction.end_at|date:"F j, Y" }}</p>
+<!-- Auction Details -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card border-0 shadow rounded-4 overflow-hidden">
+                <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}">
+                <div class="card-body p-4">
+                    <h3 class="card-title fw-bold mb-3">{{ auction.name }}</h3>
+                    <p class="card-text mb-3 text-muted">{{ auction.description }}</p>
 
-                        <h5 class="mt-4">Time Left to Start:</h5>
-                        <p class="card-text">
-                        <p class="card-text">
-                            {% if time_left_minutes > 0 %}
-                                <strong id="countdown">{{ time_left_days }} days {{ time_left_hours }}
-                                    hours {{ time_left_minutes }} minutes</strong>
-                            {% else %}
-                                <strong>The auction is now live!</strong>
-                            {% endif %}
-                        </p>
-                        {% if time_left_minutes <= 0 %}
-                            <a href="{% url 'auction_detail' pk=auction.id %}" class="btn btn-primary">Go to
-                                Auction</a>
+                    <ul class="list-unstyled mb-4">
+                        <li><strong>💰 Starting Bid:</strong> ${{ auction.starting_bid }}</li>
+                        <li><strong>🗓 Start Date:</strong> {{ auction.start_at|date:"F j, Y, g:i A" }}</li>
+                        <li><strong>🚫 End Date:</strong> {{ auction.end_at|date:"F j, Y, g:i A" }}</li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <h5 class="fw-semibold">⏱ Time Left to Start:</h5>
+                        {% if time_left_minutes > 0 %}
+                            <p id="countdown" class="fs-5 text-primary fw-bold">
+                                {{ time_left_days }} days {{ time_left_hours }} hours {{ time_left_minutes }} minutes
+                            </p>
+                        {% else %}
+                            <p class="fs-5 fw-bold text-success">The auction is now live!</p>
                         {% endif %}
-                        </p>
                     </div>
+
+                    {% if time_left_minutes <= 0 %}
+                        <a href="{% url 'auction_detail' pk=auction.id %}" class="btn btn-primary mt-3 w-100">
+                            🔥 Go to Auction
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        function updateCountdown() {
-            const countdownElement = document.getElementById("countdown");
-            const endTime = new Date("{{ auction.start_at|date:"Y-m-d H:i:s" }}").getTime();
-            const currentTime = new Date().getTime();
-            const timeLeft = endTime - currentTime;
+</div>
 
-            if (timeLeft <= 0) {
-                countdownElement.innerHTML = "The auction has started!";
-                clearInterval(timerInterval);
-            } else {
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                countdownElement.innerHTML = `${days} days ${hours} hours ${minutes} minutes`;
-            }
+<!-- Countdown Script -->
+<script>
+    function updateCountdown() {
+        const countdownElement = document.getElementById("countdown");
+        if (!countdownElement) return;
+
+        const endTime = new Date("{{ auction.start_at|date:'Y-m-d H:i:s' }}").getTime();
+        const now = new Date().getTime();
+        const timeLeft = endTime - now;
+
+        if (timeLeft <= 0) {
+            countdownElement.innerHTML = "The auction is now live!";
+            countdownElement.classList.remove("text-primary");
+            countdownElement.classList.add("text-success");
+            clearInterval(timerInterval);
+        } else {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            countdownElement.innerHTML = `${days} days ${hours} hours ${minutes} minutes`;
         }
+    }
 
-        const timerInterval = setInterval(updateCountdown, 1000);
-    </script>
-
-
+    const timerInterval = setInterval(updateCountdown, 1000);
+</script>
 {% endblock %}
+

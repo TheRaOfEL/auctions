@@ -146,3 +146,4 @@ def purchases(request):
         })
 
     return render(request, 'users/purchase.html', {'bids_with_status': bids_with_status})
+

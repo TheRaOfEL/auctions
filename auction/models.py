@@ -13,12 +13,36 @@ def default_auction_end_time():
     return timezone.now() + timedelta(days=7)
 
 class AuctionListing(models.Model):
+    CATEGORY_CHOICES = [
+        ('AR', 'Art'),
+        ('AU', 'Automotive'),
+        ('BK', 'Books'),
+        ('CL', 'Collectibles'),
+        ('EL', 'Electronics'),
+        ('FA', 'Fashion'),
+        ('FT', 'Food & Drink'),
+        ('HE', 'Health & Beauty'),
+        ('HM', 'Home & Garden'),
+        ('IN', 'Industrial Equipment'),
+        ('JL', 'Jewelry'),
+        ('MU', 'Music Instruments'),
+        ('OF', 'Office Supplies'),
+        ('PE', 'Pet Supplies'),
+        ('RE', 'Real Estate'),
+        ('SE', 'Services'),
+        ('SP', 'Sports'),
+        ('TG', 'Toys & Games'),
+        ('TR', 'Travel'),
+        ('OT', 'Other'),
+    ]
+
+
     owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=500, blank=False, null=True)
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)  # starting price
     image = models.ImageField(blank=False, null=True, upload_to='auction_images/')
-    category = models.CharField(max_length=100, null=True, blank=False)  # electronics etc
+    category = models.CharField(max_length=100, null=True, blank=False, choices=CATEGORY_CHOICES, default='OT')  # electronics etc
     created_at = models.DateTimeField(auto_now_add=True)
     start_at = models.DateTimeField(null=False, blank=False, default=timezone.now)
     end_at = models.DateTimeField(

@@ -12,4 +12,8 @@ urlpatterns = [
     path('my_watchlist/', views.my_watchlist, name='my_watchlist'),
     path('upcoming_auctions/', views.upcoming_auctions, name='upcoming_auctions'),
     path('upcoming_auction/<uuid:pk>/', views.upcoming_auction_detail, name='upcoming_auction_detail'),
+    path('terms_and_conditions/', views.terms_and_conditions, name='terms_and_conditions'),
+    path('how_it_works/', views.how_it_works, name='how_it_works'),
+    path('about_company/', views.about_company, name='about_company'),
+    path('our_news_feed/', views.our_news_feed, name='our_news_feed'),
 ]

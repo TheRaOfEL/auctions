@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 mt-5 bg-light">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold text-danger animate__animated animate__fadeInDown">Our News Feed</h1>
+            <p class="text-muted lead">Catch up on our latest announcements, updates, and industry insights.</p>
+        </div>
+
+        <!-- News Feed Cards -->
+        <div class="row g-4">
+
+            {% comment %} News Item Loop Starts {% endcomment %}
+
+            {% for item in news_items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|add:0.1|stringformat:".1f" }}s;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-{{ item.color }}">{{ item.title }}</h5>
+                        <p class="card-text text-muted">{{ item.body }}</p>
+                        <p class="text-muted small">Posted: {{ item.date }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% comment %} If you're not using a loop, use static cards instead: {% endcomment %}
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp">
+                    <div class="card-body">
+                        <h5 class="card-title text-info fw-bold">🚀 Mobile App Incoming</h5>
+                        <p class="card-text text-muted">Our Android and iOS apps are in beta. Enjoy auctions on the go soon!</p>
+                        <p class="text-muted small">Posted: June 5, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary fw-bold">📢 Featured Sellers Highlight</h5>
+                        <p class="card-text text-muted">We're showcasing top-rated sellers weekly. Visit our home page to view them!</p>
+                        <p class="text-muted small">Posted: May 28, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <div class="card-body">
+                        <h5 class="card-title text-success fw-bold">💡 Tips for Winning Auctions</h5>
+                        <p class="card-text text-muted">Check out our blog for tips on how to place strategic bids and secure your dream item!</p>
+                        <p class="text-muted small">Posted: May 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning fw-bold">🏆 Monthly Top Bidders</h5>
+                        <p class="card-text text-muted">We’ve started awarding badges to our most active and successful bidders each month!</p>
+                        <p class="text-muted small">Posted: April 30, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger fw-bold">🛠 Maintenance Notice</h5>
+                        <p class="card-text text-muted">Our platform will be under scheduled maintenance from August 1st, 12AM to 6AM WAT.</p>
+                        <p class="text-muted small">Posted: July 28, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary fw-bold">💬 Community Feedback</h5>
+                        <p class="card-text text-muted">We’re listening! New features like watchlists and notifications were built from your suggestions.</p>
+                        <p class="text-muted small">Posted: April 15, 2025</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+{% endblock %}

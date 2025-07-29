@@ -2,172 +2,183 @@
 {% load static %}
 {% block content %}
 
-<!-- Header Section -->
-<div class="container-fluid pt-5">
-    <div class="row mx-5 my-4">
-        <div class="col-12 col-md-12 col-lg-7 py-5 align-items-center">
-            <p class="text-danger fw-bold">Welcome to the Auction House</p>
-            <h1 class="display-3 fw-bold mb-3">Build, sell & collect digital items.</h1>
-            <p class="mb-5">
-                <small>
-                    Nulla facilisi. Maecenas tellus ut ligula interdum convallis. Nullam dapibus on erat in dolor
-                    posuere, none hendrerit lectus ornare. Suspendisse sit amet turpina sagittis, ultrices dui et,
-                    aliquam urna.
-                </small>
-            </p>
-            <a href="{% url 'active_auctions' %}">
-                <button class="btn btn-lg btn-danger explore">Start Exploring</button>
-            </a>
-        </div>
-
-        <div class="col-12 col-md-12 col-lg-5 py-5 align-items-center">
-            <img src="{% static 'images/chayka-boredapeclub.jpg' %}" alt="Bored Ape" class="img-fluid">
-        </div>
-    </div>
-</div>
-
-<!-- Live Auction -->
-<div class="container-fluid">
-    <div class="row mx-5">
-        <div class="col-5">
-            <h1 class="display-5 fw-bold">Live Auction</h1>
-            <p>Explore on the world's best & largest Bidding marketplace with our beautiful Bidding products. We
-                want to be a part of your smile, success and future growth.</p>
-        </div>
-        <div class="col-3 d-none d-lg-block"></div>
-        <div class="col-3 align-items-center d-flex justify-content-end">
-            <a href="{% url 'active_auctions' %}">
-                <button class="btn btn-lg px-5 btn-danger">View All</button>
-            </a>
+<!-- Hero Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <p class="text-danger fw-bold">Welcome to the Sieg's Auction House</p>
+                <h1 class="display-4 fw-bold">Buy, Sell & Win Authentic Auctions</h1>
+                <p class="mb-5">
+                    <small>
+                        Explore premium items in real-time competitive bidding. Trusted by collectors and sellers
+                        worldwide, Real Auction Place is where value meets opportunity.
+                    </small>
+                </p>
+                <a href="{% url 'active_auctions' %}">
+                    <button class="btn btn-lg btn-danger explore">Start Exploring</button>
+                </a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/chayka-boredapeclub.jpg' %}" class="img-fluid" alt="Bored Ape">
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="row mx-5 mb-5 p-3">
-        {% for auction in active_auctions %}
-        <div class="col-12 col-md-6 col-lg-4 p-3 auction-card text-center">
-            <div class="p-3 auction border">
-                <div class="auction-photo">
+<!-- Live Auctions -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold">Live Auctions</h2>
+                <p>Join thousands of bidders competing on rare and valuable items. Every bid brings you closer to
+                    ownership.</p>
+            </div>
+            <a href="{% url 'active_auctions' %}" class="btn btn-outline-danger">View All</a>
+        </div>
+
+        <div class="row">
+            {% for auction in active_auctions %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
                     <a href="{% url 'auction_detail' auction.id %}">
-                        <img src="{{ auction.image.url }}" alt="auction-1" class="img-fluid">
+                        <img src="{{ auction.image.url }}" class="card-img-top" alt="Auction Image">
                     </a>
-                    <p class="fw-bold auction-time text-danger bg-white m-0 p-3 mx-auto">{{ auction.end_at }}</p>
-                </div>
-                <div class="auction-details">
-                    <h3 class="text-start fs-4">{{ auction.name }}</h3>
-                    <div class="auctioner my-3 d-flex justify-content-between align-items-center">
-                        <div class="user d-flex align-items-center">
-                            {% if auction.owner.profile_picture %}
-                            <img src="{{ auction.owner.profile_picture.url }}" alt="auction author"
-                                 class="img-fluid me-3 rounded-circle"
-                                 style="width: 45px; height: 45px;">
-                            {% else %}
-                            <img src="{% static 'images/client-circle4.png' %}" alt="default author"
-                                 class="img-fluid me-3 rounded-circle"
-                                 style="width: 45px; height: 45px;">
-                            {% endif %}
-                            <p class="m-0 text-muted">By <span
-                                    class="fw-bold">{{ auction.owner.username }}</span></p>
-                        </div>
-                        <h4 class="text-danger fw-bold">${{ auction.starting_bid }}</h4>
-                    </div>
-                    <div class="auction-action d-flex align-items-center justify-content-between">
-                        <a href="{% url 'place_bid' auction.id %}">
-                            <button class="btn btn-md btn-danger">Place a Bid</button>
-                        </a>
-
-                        <div class="action-btns d-flex justify-content-between">
-                            <i class="fa fa-2x text-secondary fa-solid fa-heart me-3"></i>
-                            <i class="fa fa-2x  fa-solid fa-ellipsis-v"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Testimonials -->
-<div class="container-fluid mb-5 pb-5">
-    <div class="row text-center">
-        <div class="col-2 d-none d-lg-block">
-        </div>
-        <div class="col-12 col-lg-8 my-5">
-            <h1>What Clients Say</h1>
-            <p class="mx-5 px-5">Explore on the world's best & largest Bidding marketplace with our beautiful
-                Bidding products. We want to be a part of your smile, success and future growth.</p>
-        </div>
-        <div class="col-2 d-none d-lg-block">
-        </div>
-    </div>
-
-    <div class="row mx-5 px-3">
-        <div class="col-12 col-md-6 col-lg-4 p-2">
-            <div class="testimonial p-3">
-                <div class="img-group d-flex justify-content-between">
-                    <div class="test-desc d-grid">
-                        <img src="{% static 'images/testi1.png' %}" alt="testi1"
-                             class="testimonial-img img-fluid mb-3">
-                        <h5 class="mb-0">Johan Martin R</h5>
-                        <p><small>CEO Founder</small></p>
-                    </div>
-                    <img src="{% static 'images/lg_icons/quote-red.svg' %}" alt="quote"
-                         class="img-fluid align-self-start">
-                </div>
-                <div class="testimonial-text">
-                    <p><em>Maecenas vitae porttitor neque, ac porttitor nunc. Duis venenatis lacinia libero. Nam nec
-                        augue ut nunc vulputate tincidunt at suscipit nunc.</em></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Upcoming Auction -->
-    <div class="container-fluid pb-5">
-        <div class="row mx-5 mb-5">
-            <div class="col-12 col-lg-7">
-                <h1>Upcoming Auctions</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum tempore possimus consectetur
-                    laboriosam
-                    excepturi eveniet non quaerat nulla voluptatem praesentium</p>
-            </div>
-        </div>
-    </div>
-    {% for auction in coming_soon %}
-    <div class="row m-5">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="upcoming-item border border-outline-1">
-                <div class="issue ">
-                    <!-- image should be here...not literally -->
-                    <img src="{{ auction.image.url }}" alt="upcoming 1" class="img-fluid w-100">
-
-                    <div class="upcoming-timer text-center bg-black text-white d-flex justify-content-center px-3 py-2">
-                        <div class="days col">Starting<br><b>{{ auction.start_at }}</b></div>
-                    </div>
-
-                </div>
-                <div class="issue-desc px-2 pt-2">
-                    <div class="upcoming-author px-2 py-2">
-                        <!-- <img src="./assets/images/upcoming-author1.png" alt="upcoming author" class=" px-2 pb-1 pt-2 img-fluid"> -->
-                        <p class="fw-bold">Time Zone</p>
-                        <h4>{{ auction.name }}</h4>
-                        <p class="">Bidding Price: <b
-                                class="text-danger fw-bold fs-4">${{ auction.starting_bid }}</b></p>
-                        <div class="auction-action d-flex align-items-center justify-content-between mb-4">
-                            <a href="{% url 'upcoming_auction_detail' auction.id %}">
-                                <button class="btn btn-md btn-danger">View Details</button>
-                            </a>
-
-                            <div class="action-btns d-flex justify-content-between">
-                                <i class="fa fa-2x  fa-solid fa-ellipsis-v"></i>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ auction.name }}</h5>
+                        <p class="text-muted mb-1">By <strong>{{ auction.owner.username }}</strong></p>
+                        <p class="mb-2 text-danger fw-bold">${{ auction.starting_bid }}</p>
+                        <p class="text-muted"><small>Ends: <strong>{{ auction.end_at }}</strong></small></p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'place_bid' auction.id %}" class="btn btn-sm btn-danger">Place a Bid</a>
+                            <div>
+                                <i class="fas fa-heart me-3 cursor-pointer
+                                {% if user.profile in auction.watchers.all %}text-danger{% else %}text-secondary{% endif %}"
+                                   data-auction-id="{{ auction.id }}"
+                                   onclick="toggleWatchlist(this)">
+                                </i>
+                                <i class="fa fa-ellipsis-v"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
+</section>
 
-</div>
+<!-- Testimonials -->
+<section class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">What Clients Say</h2>
+        <p class="mx-5 px-5">Sieg's Auction House is trusted by collectors, buyers, and sellers globally. Our community
+            is growing stronger with every successful auction.</p>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="p-4 bg-white shadow rounded">
+                    <img src="{% static 'images/testi1.png' %}" class="mb-3 rounded-circle" width="80"
+                         alt="Testimonial">
+                    <h5>John Jones</h5>
+                    <p class="text-muted">CEO Founder</p>
+                    <p><em>“At Sieg's Auction House, our mission is to connect people with value. It’s more than
+                        selling, it’s building trust and excitement with every bid.”</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Auctions -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-3">Upcoming Auctions</h2>
+                <p>Get ready for exclusive auctions launching soon. Don’t miss the opportunity to own rare collectibles
+                    and high-value assets.</p>
+            </div>
+            <a href="{% url 'upcoming_auctions' %}" class="btn btn-outline-danger">View All</a>
+        </div>
+
+        <div class="row">
+            {% for auction in coming_soon %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <img src="{{ auction.image.url }}" class="card-img-top" alt="Upcoming Auction">
+                    <div class="card-body">
+                        <p class="text-muted">Starting: <strong>{{ auction.start_at }}</strong></p>
+                        <h5 class="card-title">{{ auction.name }}</h5>
+                        <p>Bidding Price: <span class="text-danger fw-bold">${{ auction.starting_bid }}</span></p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'upcoming_auction_detail' auction.id %}"
+                               class="btn btn-outline-danger btn-sm">View
+                                Details</a>
+                            <div>
+                                <i class="fas fa-heart me-3 cursor-pointer
+                                {% if user.profile in auction.watchers.all %}text-danger{% else %}text-secondary{% endif %}"
+                                   data-auction-id="{{ auction.id }}"
+                                   onclick="toggleWatchlist(this)">
+                                </i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<script>
+    function toggleWatchlist(icon) {
+        const auctionId = icon.getAttribute('data-auction-id');
+
+        fetch(`/watchlist/${auctionId}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: ''
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.in_watchlist) {
+                        icon.classList.remove('text-secondary');
+                        icon.classList.add('text-danger');
+                    } else {
+                        icon.classList.remove('text-danger');
+                        icon.classList.add('text-secondary');
+                    }
+                    showToast(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("An error occurred.");
+            });
+    }
+
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "position-fixed bottom-0 end-0 p-3 z-3";
+        toast.innerHTML = `
+            <div class="toast show align-items-center text-white bg-dark border-0" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+</script>
 
 {% endblock content %}

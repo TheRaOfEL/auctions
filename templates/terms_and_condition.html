@@ -1,0 +1,88 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-light py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-9">
+                <div class="bg-white p-5 rounded-4 shadow-lg animate__animated animate__fadeIn">
+                    <h1 class="text-center text-danger mb-4 fw-bold">Terms & Conditions</h1>
+
+                    <p class="text-muted text-center mb-5">Please read these terms and conditions carefully before using
+                        our platform.</p>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">1. Acceptance of Terms</h5>
+                        <p>
+                            By accessing or using Siegs Auction House, you agree to be bound by these Terms. If you do
+                            not agree, please discontinue use.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">2. User Accounts</h5>
+                        <p>
+                            Users are responsible for the confidentiality of their login credentials and all actions
+                            under their accounts.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">3. Bidding & Payments</h5>
+                        <p>
+                            All bids are final. Winning bidders are expected to make payments within 48 hours.
+                            Non-compliance may lead to account penalties.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">4. Listings Disclaimer</h5>
+                        <p>
+                            Listings are provided "as-is." We do not guarantee product quality unless otherwise stated.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">5. Prohibited Activities</h5>
+                        <ul class="list-unstyled ps-3">
+                            <li>• Automated or bot bidding</li>
+                            <li>• Fraudulent activities or misrepresentation</li>
+                            <li>• Abusive behavior toward users or staff</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">6. Account Termination</h5>
+                        <p>
+                            We reserve the right to suspend or delete accounts violating these terms, with or without
+                            prior notice.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">7. Changes to Terms</h5>
+                        <p>
+                            These terms may be updated periodically. Continued use signifies acceptance of any changes.
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="fw-semibold">8. Contact Information</h5>
+                        <p>
+                            For inquiries, email us at <a href="mailto:israelajayi149@gmail.com">israelajayi149@gmail.com</a>.
+                        </p>
+                    </div>
+
+                    <p class="text-center text-secondary mt-5 mb-0 small">
+                        © {{ now|date:"Y" }} Siegs Auction House. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Optional Animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+{% endblock %}

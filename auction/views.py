@@ -4,11 +4,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-
+from django.http import JsonResponse
 from user.models import Profile
 from .forms import BidForm, AuctionForm
 from .models import AuctionListing, Bid
-
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -96,6 +96,9 @@ def active_auctions(request):
 def auction_detail(request, pk):
     auction = AuctionListing.objects.get(id=pk)
 
+    # Determine if current user is watching this auction
+    is_watching = request.user.profile in auction.watchers.all()
+
     # Check if auction has ended and mark it as completed
     if auction.end_at is not None and auction.end_at <= timezone.now() and not auction.completed:
         highest_bid = auction.bids.order_by('-amount').first()
@@ -144,6 +147,7 @@ def auction_detail(request, pk):
         'time_left_minutes': minutes,
         'auction_status': auction_status,
         'highest_bid': highest_bid,
+        'is_watching': is_watching,
         'form': form,
     }
 
@@ -156,14 +160,24 @@ def create_auction(request):
         form = AuctionForm(request.POST, request.FILES)
         if form.is_valid():
             auction = form.save(commit=False)
-            auction.owner = request.user.profile  # assign the owner
+            auction.owner = request.user.profile
+
+            # Check for custom category
+            selected_category = form.cleaned_data['category']
+            custom_category = request.POST.get('custom_category', '').strip()
+            if selected_category == 'OT' and custom_category:
+                auction.category = custom_category  # Save custom category instead of 'OT'
+
             auction.save()
-            if auction is upcoming_auctions:
+
+            # Redirect based on auction status
+            if hasattr(auction, 'upcoming_auctions') and auction == auction.upcoming_auctions:
                 return redirect('upcoming_auctions_detail', pk=auction.id)
             else:
-                return redirect("auction_detail", auction.pk)  # Redirect to the auction details page
+                return redirect("auction_detail", auction.pk)
     else:
         form = AuctionForm()
+
     return render(request, "auction/auction_form.html", {"form": form})
 
 
@@ -217,21 +231,45 @@ def place_bid(request, pk):
     }
     return render(request, 'auction/create_bid.html', context)
 
-
 @login_required(login_url='login')
 def toggle_watchlist(request, auction_id):
-    auction = get_object_or_404(AuctionListing, id=auction_id)
-    if request.user.profile in auction.watchers.all():
-        auction.watchers.remove(request.user.profile)
-        messages.success(request, "Removed from your watchlist.")
-    else:
-        auction.watchers.add(request.user.profile)
-        messages.success(request, "Added to your watchlist.")
-    return redirect('auction_detail', pk=auction_id)
+    if request.method == 'POST':
+        auction = get_object_or_404(AuctionListing, id=auction_id)
+        user_profile = request.user.profile  # Assuming you have a Profile model
 
+        if user_profile in auction.watchers.all():
+            auction.watchers.remove(user_profile)
+            return JsonResponse({
+                'success': True,
+                'in_watchlist': False,
+                'message': "Removed from your watchlist."
+            })
+        else:
+            auction.watchers.add(user_profile)
+            return JsonResponse({
+                'success': True,
+                'in_watchlist': True,
+                'message': "Added to your watchlist."
+            })
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
 @login_required(login_url='login')
 def my_watchlist(request):
     profile = Profile.objects.get(user=request.user)
     watchlist_items = AuctionListing.objects.filter(watchers=profile)
     return render(request, 'auction/watchlist.html', {'watchlist': watchlist_items})
+
+
+def terms_and_conditions(request):
+    return render(request, 'terms_and_condition.html')
+
+def how_it_works(request):
+    return render(request, 'how_it_works.html')
+
+def about_company(request):
+    return render(request, 'about_company.html')
+
+def our_news_feed(request):
+    return render(request, 'our_news_feed.html')
+
