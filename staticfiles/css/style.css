@@ -152,4 +152,24 @@ a {
     background-color: #121212; /* Dark background */
     color: #e0e0e0; /* Light gray text for dark mode */
 }
-x
+
+body.dark-mode .form-select {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-mode .form-select option {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.important-links a,
+.help-links a {
+    color: skyblue !important;
+    text-decoration: none;
+}
+
+.important-links a:hover {
+    color: #f8d7da; /* or any hover color you like */
+}
