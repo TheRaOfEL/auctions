@@ -2,7 +2,8 @@
 
 {% block content %}
 <!-- Header Section -->
-<div class="container-fluid py-5 text-white" style="background: linear-gradient(135deg, #17a2b8, #0f5e7d); padding-top: 120px;">
+<div class="container-fluid py-5 text-white"
+     style="background: linear-gradient(135deg, #17a2b8, #0f5e7d); padding-top: 120px;">
     <div class="row justify-content-center">
         <div class="col-lg-10 text-center">
             <h1 class="display-5 fw-bold">⏳ Upcoming Auction Details</h1>
@@ -30,18 +31,32 @@
                     <div class="mt-4">
                         <h5 class="fw-semibold">⏱ Time Left to Start:</h5>
                         {% if time_left_minutes > 0 %}
-                            <p id="countdown" class="fs-5 text-primary fw-bold">
-                                {{ time_left_days }} days {{ time_left_hours }} hours {{ time_left_minutes }} minutes
-                            </p>
+                        <p id="countdown" class="fs-5 text-primary fw-bold">
+                            {{ time_left_days }} days {{ time_left_hours }} hours {{ time_left_minutes }} minutes
+                        </p>
                         {% else %}
-                            <p class="fs-5 fw-bold text-success">The auction is now live!</p>
+                        <p class="fs-5 fw-bold text-success">The auction is now live!</p>
                         {% endif %}
                     </div>
+                    {% if is_owner and is_upcoming and not has_bids %}
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="{% url 'edit_auction' auction.pk %}" class="btn btn-outline-warning w-50">✏️ Edit</a>
+                        <a href="{% url 'delete_auction' auction.pk %}" class="btn btn-outline-danger w-50">🗑 Delete</a>
+                    </div>
+                    {% elif is_owner and not is_upcoming %}
+                    <div class="alert alert-info mt-4">ℹ️ This auction has already started and cannot be edited or
+                        deleted.
+                    </div>
+                    {% elif is_owner and has_bids %}
+                    <div class="alert alert-warning mt-4">🔒 This auction has received bids and can no longer be edited
+                        or deleted.
+                    </div>
+                    {% endif %}
 
                     {% if time_left_minutes <= 0 %}
-                        <a href="{% url 'auction_detail' pk=auction.id %}" class="btn btn-primary mt-3 w-100">
-                            🔥 Go to Auction
-                        </a>
+                    <a href="{% url 'auction_detail' pk=auction.id %}" class="btn btn-primary mt-3 w-100">
+                        🔥 Go to Auction
+                    </a>
                     {% endif %}
                 </div>
             </div>

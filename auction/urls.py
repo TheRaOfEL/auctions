@@ -7,6 +7,8 @@ urlpatterns = [
     path('active_auctions/', views.active_auctions, name='active_auctions'),
     path('auction/<uuid:pk>/', views.auction_detail, name='auction_detail'),
     path('create_auction/', views.create_auction, name='create_auction'),
+    path('auction/<uuid:pk>/edit/', views.edit_auction, name='edit_auction'),
+    path('auction/<uuid:pk>/delete/', views.delete_auction, name='delete_auction'),
     path('place_bid/<uuid:pk>/', views.place_bid, name='place_bid'),
     path('watchlist/<uuid:auction_id>/toggle/', views.toggle_watchlist, name='toggle_watchlist'),
     path('my_watchlist/', views.my_watchlist, name='my_watchlist'),
@@ -16,4 +18,5 @@ urlpatterns = [
     path('how_it_works/', views.how_it_works, name='how_it_works'),
     path('about_company/', views.about_company, name='about_company'),
     path('our_news_feed/', views.our_news_feed, name='our_news_feed'),
+    path('help_center/', views.help_center, name='help_center'),
 ]

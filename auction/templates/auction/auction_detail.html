@@ -5,18 +5,18 @@
 
 <script>
     function showFlashMessage(message, isSuccess = true) {
-    const flash = document.getElementById('flash-message');
+        const flash = document.getElementById('flash-message');
 
-    // Set classes and content
-    flash.className = `alert alert-${isSuccess ? 'success' : 'danger'} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg text-center px-4 py-2 rounded`;
-    flash.textContent = message;
-    flash.classList.remove('d-none');
+        // Set classes and content
+        flash.className = `alert alert-${isSuccess ? 'success' : 'danger'} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg text-center px-4 py-2 rounded`;
+        flash.textContent = message;
+        flash.classList.remove('d-none');
 
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
-        flash.classList.add('d-none');
-    }, 3000);
-}
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            flash.classList.add('d-none');
+        }, 3000);
+    }
 
 </script>
 
@@ -90,6 +90,14 @@
                             Add to Watchlist
                             {% endif %}
                         </button>
+                        {% if auction.owner == user.profile %}
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'edit_auction' auction.id %}"
+                               class="btn btn-outline-warning btn-sm">Edit</a>
+                            <a href="{% url 'delete_auction' auction.id %}"
+                               class="btn btn-outline-danger btn-sm">Delete</a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -113,45 +121,45 @@
 </div>
 
 <script>
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
 
-function toggleWatchlist(button) {
-    const auctionId = button.dataset.auctionId;
+    function toggleWatchlist(button) {
+        const auctionId = button.dataset.auctionId;
 
-    fetch(`/watchlist/${auctionId}/toggle/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken'),
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            button.classList.toggle('text-danger', data.in_watchlist);
-            button.classList.toggle('text-secondary', !data.in_watchlist);
-            showFlashMessage(data.message, data.in_watchlist);
-        } else {
-            showFlashMessage("An error occurred.", false);
-        }
-    })
-    .catch(() => {
-        showFlashMessage("An error occurred. Please try again.", false);
-    });
-}
+        fetch(`/watchlist/${auctionId}/toggle/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    button.classList.toggle('text-danger', data.in_watchlist);
+                    button.classList.toggle('text-secondary', !data.in_watchlist);
+                    showFlashMessage(data.message, data.in_watchlist);
+                } else {
+                    showFlashMessage("An error occurred.", false);
+                }
+            })
+            .catch(() => {
+                showFlashMessage("An error occurred. Please try again.", false);
+            });
+    }
 </script>
 
 {% endblock %}

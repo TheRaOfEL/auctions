@@ -1,0 +1,71 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 mt-5 bg-light text-dark dark:bg-dark dark:text-light">
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <h1 class="fw-bold text-primary">Help Center</h1>
+      <p class="lead text-muted">How can we assist you today?</p>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">How do I list an item for auction?</h5>
+            <p class="card-text text-muted">Go to your dashboard, click "Create Auction", fill in the item details, and submit. Your listing will be reviewed before it goes live.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">How do I place a bid?</h5>
+            <p class="card-text text-muted">Navigate to a live auction and enter your bid amount. Make sure it's higher than the current bid.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">What if I win an auction?</h5>
+            <p class="card-text text-muted">You’ll receive a confirmation email and a payment link. Once payment is made, the seller will ship the item.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold">Can I cancel my bid?</h5>
+            <p class="card-text text-muted">Bids are binding. You cannot cancel a bid once placed, except under rare circumstances. Contact support for help.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="text-center mt-5">
+      <h4 class="fw-bold">Need more help?</h4>
+      <p class="text-muted">Our support team is here 24/7.</p>
+      <a href="" class="btn btn-outline-primary">Contact Support</a>
+    </div>
+  </div>
+</section>
+
+<!-- Optional Styling -->
+<style>
+.dark .card {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+}
+.dark .card-text {
+    color: #ccc;
+}
+</style>
+{% endblock %}

@@ -160,7 +160,7 @@
                     <h4>Help & FAQs</h4>
 
                     <div class="help-links d-grid gap-3">
-                        <a href="">Help Center</a>
+                        <a href="{% url 'help_center' %}">Help Center</a>
                         <a href="">Customer FAQs</a>
                         <a href="{% url 'terms_and_conditions'%}">Terms and Conditions</a>
                         <a href="">Security Information</a>
@@ -235,6 +235,15 @@
             text.textContent = "Light Mode";
         }
     });
+
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.classList.remove('show');
+            alert.classList.add('hide');
+        }, 4000);  // 4 seconds
+    });
+
 </script>
 
 

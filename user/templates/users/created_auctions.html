@@ -46,7 +46,7 @@
                                 <p class="card-text text-muted small">
                                     {{ auction.description|truncatechars:100 }}
                                 </p>
-                                <p class="fw-semibold mb-2">Starting Bid: ₦{{ auction.starting_bid }}</p>
+                                <p class="fw-semibold mb-2">Starting Bid: ${{ auction.starting_bid }}</p>
                                 {% if auction.is_upcoming %}
                                     <a href="{% url 'upcoming_auction_detail' auction.id %}"
                                        class="btn btn-outline-warning mt-auto">View Auction</a>

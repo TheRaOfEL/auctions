@@ -8,7 +8,8 @@ from django.http import JsonResponse
 from user.models import Profile
 from .forms import BidForm, AuctionForm
 from .models import AuctionListing, Bid
-from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
+
 
 # Create your views here.
 
@@ -43,26 +44,32 @@ def upcoming_auctions(request):
         'upcoming_auctions': upcoming_auctions
     })
 
-
+@login_required(login_url='login')
 def upcoming_auction_detail(request, pk):
     auction = get_object_or_404(AuctionListing, id=pk)
 
-    # Calculate time left
+    # Time left until auction starts
     time_left = auction.start_at - timezone.now()
-
-    # Prepare the time components
-    if time_left > timedelta(0):  # Auction is not yet live
+    if time_left > timedelta(0):
         days = time_left.days
         hours = time_left.seconds // 3600
         minutes = (time_left.seconds // 60) % 60
     else:
         days, hours, minutes = 0, 0, 0
 
+    # Ownership and bid checks
+    is_owner = auction.owner == request.user.profile  # or request.user if no profile model
+    has_bids = auction.bids.exists()  # Assumes related_name='bids' in your Bid model
+    is_upcoming = timezone.now() < auction.start_at
+
     context = {
         'auction': auction,
         'time_left_days': days,
         'time_left_hours': hours,
         'time_left_minutes': minutes,
+        'is_owner': is_owner,
+        'has_bids': has_bids,
+        'is_upcoming': is_upcoming,
     }
 
     return render(request, 'auction/upcoming_auction_details.html', context)
@@ -74,7 +81,7 @@ def active_auctions(request):
     now = timezone.now()
 
     # Fetch active auctions (auction where the end date is greater than now)
-    active_auctions = AuctionListing.objects.filter(start_at__lte=now,end_at__gte=now)
+    active_auctions = AuctionListing.objects.filter(start_at__lte=now, end_at__gte=now)
 
     # Calculate the time left for each auction
     for auction in active_auctions:
@@ -162,23 +169,60 @@ def create_auction(request):
             auction = form.save(commit=False)
             auction.owner = request.user.profile
 
-            # Check for custom category
+            # Handle custom category
             selected_category = form.cleaned_data['category']
             custom_category = request.POST.get('custom_category', '').strip()
             if selected_category == 'OT' and custom_category:
-                auction.category = custom_category  # Save custom category instead of 'OT'
+                auction.category = custom_category
 
             auction.save()
 
-            # Redirect based on auction status
-            if hasattr(auction, 'upcoming_auctions') and auction == auction.upcoming_auctions:
-                return redirect('upcoming_auctions_detail', pk=auction.id)
+            # Redirect based on whether auction is upcoming
+            if auction.start_at and auction.start_at > timezone.now():
+                return redirect('upcoming_auction_detail', pk=auction.id)
             else:
-                return redirect("auction_detail", auction.pk)
+                return redirect('auction_detail', auction.pk)
     else:
         form = AuctionForm()
 
     return render(request, "auction/auction_form.html", {"form": form})
+
+
+@login_required(login_url='login')
+def edit_auction(request, pk):
+    auction = get_object_or_404(AuctionListing, pk=pk, owner=request.user.profile)
+
+    if auction.bids.exists():
+        messages.error(request, "You can't edit this auction because a bid has already been placed.")
+        return redirect('auction_detail', pk=pk)
+
+    form = AuctionForm(request.POST or None, request.FILES or None, instance=auction)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Auction updated successfully.")
+        # Redirect based on whether auction is upcoming
+        if auction.start_at and auction.start_at > timezone.now():
+            return redirect('upcoming_auction_detail', pk=auction.id)
+        else:
+            return redirect('auction_detail', auction.pk)
+
+    return render(request, 'auction/edit_auction.html', {'form': form, 'auction': auction})
+
+
+login_required(login_url='login')
+def delete_auction(request, pk):
+    auction = get_object_or_404(AuctionListing, pk=pk, owner=request.user.profile)
+
+    if auction.bids.exists():
+        messages.error(request, "You can't delete this auction because a bid has already been placed.")
+        return redirect('auction_detail', pk=pk)
+
+    if request.method == "POST":
+        auction.delete()
+        messages.success(request, "Auction deleted successfully!")
+        return redirect('homepage')
+
+    return render(request, 'auction/delete_auction.html', {'auction': auction})
 
 
 @login_required(login_url='login')
@@ -231,6 +275,7 @@ def place_bid(request, pk):
     }
     return render(request, 'auction/create_bid.html', context)
 
+
 @login_required(login_url='login')
 def toggle_watchlist(request, auction_id):
     if request.method == 'POST':
@@ -254,6 +299,7 @@ def toggle_watchlist(request, auction_id):
 
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
 
+
 @login_required(login_url='login')
 def my_watchlist(request):
     profile = Profile.objects.get(user=request.user)
@@ -264,12 +310,17 @@ def my_watchlist(request):
 def terms_and_conditions(request):
     return render(request, 'terms_and_condition.html')
 
+
 def how_it_works(request):
     return render(request, 'how_it_works.html')
+
 
 def about_company(request):
     return render(request, 'about_company.html')
 
+
 def our_news_feed(request):
     return render(request, 'our_news_feed.html')
 
+def help_center(request):
+    return render(request, 'help_center.html')

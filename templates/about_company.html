@@ -55,7 +55,6 @@
     </div>
 </section>
 
-<!-- Timeline CSS -->
 <style>
 .timeline-section {
     position: relative;
@@ -92,10 +91,29 @@
 }
 .timeline-content {
     background: #f8f9fa;
+    color: #212529;
     padding: 15px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
+
+/* 🌙 Dark mode support */
+body.dark-mode .timeline::before {
+    background: #444;
+}
+body.dark-mode .timeline-content {
+    background: #1e1e1e;
+    color: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+}
+body.dark-mode .timeline-content h5 {
+    color: #ffc107;
+}
+body.dark-mode .text-muted {
+    color: #ccc !important;
+}
+
 @media (max-width: 767px) {
     .timeline::before {
         left: 8px;
@@ -108,5 +126,6 @@
     }
 }
 </style>
+
 {% endblock %}
 
