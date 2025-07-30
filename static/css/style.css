@@ -173,3 +173,11 @@ body.dark-mode .form-select option {
 .important-links a:hover {
     color: #f8d7da; /* or any hover color you like */
 }
+
+.footer-socials i {
+    color: white;
+    transition: color 0.3s;
+}
+.footer-socials i:hover {
+    color: #ffcc00; /* or any hover color you like */
+}

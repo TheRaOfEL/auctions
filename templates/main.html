@@ -129,14 +129,17 @@
                 <div class="access">
                     <h4 class="mb-3">Join Newsletter</h4>
                     <p class="mb-4">Subscribe our newsletter to get more free design course and resource.</p>
-                    <input type="text" name="subscribe" class="form-control" placeholder="your email">
-                    <button class="btn btn-danger btn-md mt-3" type="submit">Submit</button>
+                    <form method="POST" action="{% url 'handle_newsletter' %}" class="d-flex gap-2 mt-3">
+                        {% csrf_token %}
+                        <input type="email" name="email" class="form-control" placeholder="Your email" required>
+                        <button type="submit" class="btn btn-danger">Subscribe</button>
+                    </form>
 
-                    <div class="socials mt-4">
-                        <a class="me-4" href=""><i class="fa fs-4 fa-solid fa-twitter"></i></a>
-                        <a class="me-4" href=""><i class="fa fs-4 fa-solid fa-facebook"></i></a>
-                        <a class="me-4" href=""><i class="fa fs-4 fa-solid fa-whatsapp"></i></a>
-                        <a class="me-4" href=""><i class="fa fs-4 fa-solid fa-instagram"></i></a>
+                    <div class="socials mt-4 footer-socials">
+                        <a class="me-4" href="#"><i class="fab fa-twitter fs-4"></i></a>
+                        <a class="me-4" href="#"><i class="fab fa-facebook fs-4"></i></a>
+                        <a class="me-4" href="#"><i class="fab fa-whatsapp fs-4"></i></a>
+                        <a class="me-4" href="#"><i class="fab fa-instagram fs-4"></i></a>
                     </div>
                 </div>
             </div>
@@ -161,10 +164,10 @@
 
                     <div class="help-links d-grid gap-3">
                         <a href="{% url 'help_center' %}">Help Center</a>
-                        <a href="">Customer FAQs</a>
+                        <a href="{% url 'customer_faqs' %}">Customer FAQs</a>
                         <a href="{% url 'terms_and_conditions'%}">Terms and Conditions</a>
-                        <a href="">Security Information</a>
-                        <a href="">Merchant Add Policy</a>
+                        <a href="{% url 'security_information' %}">Security Information</a>
+                        <a href="{% url 'merchant_policy' %}">Merchant Add Policy</a>
                     </div>
                 </div>
             </div>

@@ -6,9 +6,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.http import JsonResponse
 from user.models import Profile
-from .forms import BidForm, AuctionForm
-from .models import AuctionListing, Bid
-from django.http import HttpResponseForbidden
+from .forms import BidForm, AuctionForm, NewsletterForm
+from .models import AuctionListing, Bid, NewsletterSubscriber
+from django.core.mail import send_mail
+
 
 
 # Create your views here.
@@ -307,6 +308,29 @@ def my_watchlist(request):
     return render(request, 'auction/watchlist.html', {'watchlist': watchlist_items})
 
 
+def handle_newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            if not NewsletterSubscriber.objects.filter(email=email).exists():
+                form.save()
+                messages.success(request, "Subscribed to newsletter successfully!")
+
+                # Auto-send welcome email
+                send_mail(
+                    subject='Welcome to Siegs Auction Newsletter!',
+                    message='Thank you for subscribing to our newsletter. Stay tuned for exclusive auction updates and deals!',
+                    from_email=None,  # Uses DEFAULT_FROM_EMAIL
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+            else:
+                messages.info(request, "You're already subscribed.")
+        else:
+            messages.error(request, "Invalid email address.")
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 def terms_and_conditions(request):
     return render(request, 'terms_and_condition.html')
 
@@ -322,5 +346,41 @@ def about_company(request):
 def our_news_feed(request):
     return render(request, 'our_news_feed.html')
 
+def customer_faqs(request):
+    customer_faqs = [
+        ("How do I create an account?", "Click on 'Sign Up' at the top-right corner and fill in your details."),
+        ("Is it free to list an item?",
+         "Yes, listing items is free. We charge only a small fee upon successful auction."),
+        ("How do I place a bid?", "Once an auction is live, you can place bids from the item’s detail page."),
+        ("What happens if I win?", "You’ll receive an email with payment and delivery instructions."),
+        ("Can I cancel my bid?", "No, all bids are final. Please bid responsibly."),
+        ("How can I edit or delete my auction?",
+         "You can edit or delete your auction before any bids are placed from your dashboard."),
+        ("What types of items can I list?", "You can list anything legal that complies with our listing guidelines."),
+        ("How do I upload photos of my item?", "During listing, use the image upload section to add clear photos."),
+        ("When will my auction start?", "You can set the start time when creating your auction."),
+        ("How long can my auction run?", "You can choose a duration between 1 hour and 30 days."),
+        ("How do I receive payment after an auction?",
+         "Buyers are instructed to pay you directly through your preferred payment method."),
+        ("Can I relist unsold items?", "Yes, items that don’t sell can be relisted for free."),
+        ("How do I report a fraudulent buyer?",
+         "Go to the buyer’s profile and click 'Report User' or contact support."),
+        ("Is my personal information safe?", "Yes, we use secure encryption to protect your data."),
+        ("Can I view upcoming auctions?", "Yes, the ‘Upcoming Auctions’ page lists all scheduled items."),
+        ("Do you have a mobile app?", "We’re working on one! For now, the website is mobile-optimized."),
+        ("How do I change my password?", "Go to Account Settings > Security to update your password."),
+        ("What happens if I miss a bidding deadline?",
+         "Unfortunately, late bids are not accepted. Set reminders to avoid missing deadlines."),
+        ("How do I unsubscribe from newsletters?", "Click the unsubscribe link in any newsletter email."),
+        ("Can I contact the seller before bidding?", "Yes, use the ‘Contact Seller’ button on the listing page."),
+    ]
+    return render(request, 'customer_faqs.html', {'customer_faqs': customer_faqs})
+
 def help_center(request):
     return render(request, 'help_center.html')
+
+def security_information(request):
+    return render(request, 'security_information.html')
+
+def merchant_policy(request):
+    return render(request, 'merchant_policy.html')

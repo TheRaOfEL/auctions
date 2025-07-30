@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .views import security_information
 
 urlpatterns = [
     path('', views.index, name='homepage'),
@@ -19,4 +20,8 @@ urlpatterns = [
     path('about_company/', views.about_company, name='about_company'),
     path('our_news_feed/', views.our_news_feed, name='our_news_feed'),
     path('help_center/', views.help_center, name='help_center'),
+    path('subscribe/', views.handle_newsletter, name='handle_newsletter'),
+    path('customer_faqs/', views.customer_faqs, name='customer_faqs'),
+    path('security_information', views.security_information, name='security_information'),
+    path('merchant_policy', views.merchant_policy, name='merchant_policy'),
 ]

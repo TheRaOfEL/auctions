@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5 mt-5 bg-light text-dark">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">Security Information</h1>
+            <p class="text-muted lead">Your safety is our priority at Siegs Auction House.</p>
+        </div>
+
+        <!-- Sections -->
+        <div class="row g-4">
+            <!-- Data Protection -->
+            <div class="col-md-6">
+                <div class="p-4 bg-white rounded shadow-sm h-100">
+                    <h4 class="text-success fw-semibold">🔒 Data Protection</h4>
+                    <p class="text-muted">We use industry-standard encryption (SSL/TLS) to secure your personal data and
+                        prevent unauthorized access.</p>
+                </div>
+            </div>
+
+            <!-- Payment Safety -->
+            <div class="col-md-6">
+                <div class="p-4 bg-white rounded shadow-sm h-100">
+                    <h4 class="text-danger fw-semibold">💳 Safe Payments</h4>
+                    <p class="text-muted">All transactions are monitored and protected by secure payment gateways. We
+                        never store your card or bank details.</p>
+                </div>
+            </div>
+
+            <!-- Account Security -->
+            <div class="col-md-6">
+                <div class="p-4 bg-white rounded shadow-sm h-100">
+                    <h4 class="text-info fw-semibold">🛡️ Account Protection</h4>
+                    <p class="text-muted">We recommend strong passwords and offer multi-factor authentication to secure
+                        your account.</p>
+                </div>
+            </div>
+
+            <!-- Fraud Prevention -->
+            <div class="col-md-6">
+                <div class="p-4 bg-white rounded shadow-sm h-100">
+                    <h4 class="text-warning fw-semibold">🚨 Fraud Prevention</h4>
+                    <p class="text-muted">Our team actively monitors suspicious activity and allows users to report
+                        scams and fake listings easily.</p>
+                </div>
+            </div>
+
+            <!-- User Tips -->
+            <div class="col-md-12">
+                <div class="p-4 bg-white rounded shadow-sm">
+                    <h4 class="text-dark fw-semibold">🧠 Your Role in Staying Secure</h4>
+                    <ul class="text-muted">
+                        <li>Never share your login credentials with anyone.</li>
+                        <li>Beware of offers that sound too good to be true.</li>
+                        <li>Report any suspicious behavior immediately.</li>
+                        <li>Keep your browser and device software up to date.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="text-center mt-5">
+            <p class="text-muted">Still have questions? <a href="{% url 'help_center' %}" class="text-primary">Visit our
+                Help Center</a> or <a href="" class="text-primary">contact support</a>.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
