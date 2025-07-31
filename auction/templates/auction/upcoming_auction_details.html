@@ -1,5 +1,5 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 <!-- Header Section -->
 <div class="container-fluid py-5 text-white"
@@ -60,22 +60,25 @@
                     {% endif %}
 
                     {% if request.user.profile != auction.owner %}
-                    <div class="d-flex align-items-center gap-3 mt-4 p-3 bg-white border rounded shadow-sm">
-                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center"
-                             style="width: 50px; height: 50px;">
-                                <span class="text-white fw-bold fs-4 text-uppercase">
-                                    {{ auction.owner.username|slice:":1" }}
-                                </span>
-                        </div>
+                    <div class="d-flex align-items-center gap-3 mt-4 p-3 bg-body-tertiary border rounded shadow-sm">
+                        {% if auction.owner.profile_picture %}
+                        <img src="{{ auction.owner.profile_picture.url }}" alt="{{ auction.owner.username }}"
+                             class="rounded-circle border" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/client-circle4.png' %}" alt="Default"
+                             class="rounded-circle border" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% endif %}
 
                         <div class="flex-grow-1">
                             <p class="mb-1 text-muted small">Listed by</p>
-                            <h6 class="fw-bold mb-0">{{ auction.owner.username }}</h6>
+                            <h6 class="mb-0 fw-semibold text-capitalize">{{ auction.owner.username }}</h6>
                         </div>
 
                         <a href="{% url 'seller_profile' pk=auction.owner.pk %}"
                            class="btn btn-outline-dark btn-sm rounded-pill">View Seller</a>
+
                     </div>
+
                     {% endif %}
                 </div>
             </div>

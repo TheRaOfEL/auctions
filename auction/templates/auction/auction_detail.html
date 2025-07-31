@@ -107,7 +107,7 @@
                                  class="rounded-circle border" style="width: 50px; height: 50px; object-fit: cover;">
                             {% else %}
                             <img src="{% static 'images/client-circle4.png' %}" alt="Default"
-                                 class="rounded-circle border" style="width: 50px; height: 50px; object-fit: cover;" >
+                                 class="rounded-circle border" style="width: 50px; height: 50px; object-fit: cover;">
                             {% endif %}
 
                             <div class="flex-grow-1">
@@ -119,29 +119,29 @@
                                class="btn btn-outline-dark btn-sm rounded-pill">View Seller</a>
 
                         </div>
-                    </div>
-                    {% endif %}
 
+                        {% endif %}
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Highest Bidder Info -->
-<div class="card mt-5 shadow-lg border-0 rounded-4">
-    <div class="card-header bg-dark text-white fw-bold fs-5">
-        Highest Bid Info
+    <!-- Highest Bidder Info -->
+    <div class="card mt-5 shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white fw-bold fs-5">
+            Highest Bid Info
+        </div>
+        <div class="card-body">
+            {% if highest_bid %}
+            <p class="mb-2"><strong>Bidder:</strong> {{ highest_bid.bidder.user.username }}</p>
+            <p><strong>Amount:</strong> ${{ highest_bid.amount }}</p>
+            {% else %}
+            <p class="text-muted">No bids placed yet.</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="card-body">
-        {% if highest_bid %}
-        <p class="mb-2"><strong>Bidder:</strong> {{ highest_bid.bidder.user.username }}</p>
-        <p><strong>Amount:</strong> ${{ highest_bid.amount }}</p>
-        {% else %}
-        <p class="text-muted">No bids placed yet.</p>
-        {% endif %}
-    </div>
-</div>
 </div>
 
 <script>

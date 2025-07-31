@@ -83,8 +83,8 @@
     <div class="row justify-content-center mb-5">
         <div class="col-lg-8">
             <div class="profile-header p-4 text-center shadow-lg animate__animated animate__fadeInDown">
-                {% if auction.owner.profile_picture %}
-                            <img src="{{ auction.owner.profile_picture.url }}" alt="{{ auction.owner.username }}"
+                {% if seller.profile_picture %}
+                            <img src="{{ seller.profile_picture.url }}" alt="{{ auction.owner.username }}"
                                  class="rounded-circle profile-picture mb-3">
                             {% else %}
                             <img src="{% static 'images/client-circle4.png' %}" alt="Default"
