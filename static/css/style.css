@@ -181,3 +181,56 @@ body.dark-mode .form-select option {
 .footer-socials i:hover {
     color: #ffcc00; /* or any hover color you like */
 }
+
+/* Auction Card Styling */
+.auction-card {
+    background-color: #ffffff;
+    color: #212529;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auction-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.badge.bg-gradient {
+    background: linear-gradient(45deg, #4e9cff, #6f42c1);
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+.gradient-btn {
+    background: linear-gradient(45deg, #4e9cff, #6f42c1);
+    color: white;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.gradient-btn:hover {
+    background: linear-gradient(45deg, #6f42c1, #4e9cff);
+}
+
+/* Dark Mode Styles */
+body.dark-mode .auction-card {
+    background-color: #1f1f1f;
+    color: #f0f0f0;
+}
+
+body.dark-mode .card-text {
+    color: #cccccc;
+}
+
+body.dark-mode .gradient-btn {
+    background: linear-gradient(45deg, #3c8dbc, #9f58e0);
+}
+
+body.dark-mode .gradient-btn:hover {
+    background: linear-gradient(45deg, #9f58e0, #3c8dbc);
+}
+
+body.dark-mode .badge.bg-gradient {
+    background: linear-gradient(45deg, #9f58e0, #3c8dbc);
+}
+

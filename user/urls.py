@@ -11,4 +11,5 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('my_auctions/', views.created_auction, name='created_auctions'),
     path('my_purchases/', views.purchases, name='my_purchases'),
+    path('seller/<uuid:pk>/', views.seller_profile, name='seller_profile'),
 ]

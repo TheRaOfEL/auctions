@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from auction.models import AuctionListing, Bid
 from .forms import UserRegistrationForm, ProfileForm
 from .models import Profile
+from django.utils import timezone
 
 
 # Create your views here.
@@ -147,3 +148,18 @@ def purchases(request):
 
     return render(request, 'users/purchase.html', {'bids_with_status': bids_with_status})
 
+
+def seller_profile(request, pk):
+    seller = get_object_or_404(Profile, pk=pk)  # pk is int
+    now = timezone.now()
+    seller_auctions = AuctionListing.objects.filter(owner=seller)
+
+    current_auctions = seller_auctions.filter(start_at__lte=now, end_at__gte=now)
+    upcoming_auctions = seller_auctions.filter(start_at__gt=now)
+
+    context = {
+        'seller': seller,
+        'current_auctions': current_auctions,
+        'upcoming_auctions': upcoming_auctions,
+    }
+    return render(request, 'users/seller_profile.html', context)

@@ -1,0 +1,181 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+
+<style>
+    /* Light Mode Styles */
+    .light-mode {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    .light-mode .profile-header {
+        background: linear-gradient(135deg, #6f42c1, #4e9cff);
+        color: white;
+    }
+
+    .light-mode .card {
+        background-color: white;
+        color: #212529;
+        border: none;
+    }
+
+    .light-mode .gradient-btn {
+        background: linear-gradient(45deg, #4e9cff, #6f42c1);
+        color: white;
+        border: none;
+    }
+
+    .light-mode .gradient-btn:hover {
+        background: linear-gradient(45deg, #6f42c1, #4e9cff);
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode {
+        background-color: #121212;
+        color: #f0f0f0;
+    }
+
+    .dark-mode .profile-header {
+        background: linear-gradient(135deg, #4e9cff, #6f42c1);
+        color: white;
+    }
+
+    .dark-mode .card {
+        background-color: #1e1e1e;
+        color: #ddd;
+        border: 1px solid #333;
+    }
+
+    .dark-mode .gradient-btn {
+        background: linear-gradient(45deg, #3c8dbc, #9f58e0);
+        color: white;
+    }
+
+    .dark-mode .gradient-btn:hover {
+        background: linear-gradient(45deg, #9f58e0, #3c8dbc);
+    }
+
+    /* Shared Styles */
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .auction-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .auction-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<!-- Make sure your body or a wrapping div has either .dark-mode or .light-mode -->
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <!-- Seller Info -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="profile-header p-4 text-center shadow-lg animate__animated animate__fadeInDown">
+                {% if auction.owner.profile_picture %}
+                            <img src="{{ auction.owner.profile_picture.url }}" alt="{{ auction.owner.username }}"
+                                 class="rounded-circle profile-picture mb-3">
+                            {% else %}
+                            <img src="{% static 'images/client-circle4.png' %}" alt="Default"
+                                 class="rounded-circle profile-picture mb-3" >
+                            {% endif %}
+
+                <h2 class="fw-bold mb-3">{{ seller.username }}'s Profile</h2>
+
+                <div class="text-start mx-auto" style="max-width: 400px;">
+                    <p><strong>Name:</strong> {{ seller.name|default:"N/A" }}</p>
+                    <p><strong>Username:</strong> {{ seller.username }}</p>
+                    <p><strong>Location:</strong> <i class="bi bi-geo-alt-fill"></i> {{ seller.location|default:"Unknown location" }}</p>
+                    <p><strong>Email:</strong> <i class="bi bi-envelope-fill"></i> {{ seller.email }}</p>
+
+                    <p><strong>Bio:</strong><br>
+                        {% if seller.bio %}
+                        <span class="fst-italic">{{ seller.bio }}</span>
+                        {% else %}
+                        <span class="text-light">This user hasn’t added a bio yet.</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Seller Auctions -->
+<div class="row">
+
+    <!-- Current Auctions -->
+    <div class="col-12 mb-4 text-center">
+        <h3 class="fw-semibold animate__animated animate__fadeInUp">Current Auctions</h3>
+    </div>
+    {% for auction in current_auctions %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card auction-card shadow-lg border-0 h-100 animate__animated animate__fadeInUp">
+            <div class="position-relative">
+                <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}"
+                     style="height: 220px; object-fit: cover;">
+                <span class="badge bg-success position-absolute top-0 end-0 m-2 p-2 rounded-pill shadow-sm">
+                {{ auction.category.name }}
+            </span>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-semibold">{{ auction.name }}</h5>
+                <p class="card-text">{{ auction.description|truncatechars:100 }}</p>
+                <a href="{% url 'auction_detail' pk=auction.pk %}" class="btn gradient-btn mt-auto w-100">View
+                    Auction</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center text-muted animate__animated animate__fadeIn">
+        <p>No current auctions.</p>
+    </div>
+    {% endfor %}
+
+    <!-- Upcoming Auctions -->
+    <div class="col-12 mt-5 mb-4 text-center">
+        <h3 class="fw-semibold animate__animated animate__fadeInUp">Upcoming Auctions</h3>
+    </div>
+    {% for auction in upcoming_auctions %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card auction-card shadow border-0 h-100 animate__animated animate__fadeInUp">
+            <div class="position-relative">
+                <img src="{{ auction.image.url }}" class="card-img-top" alt="{{ auction.name }}"
+                     style="height: 220px; object-fit: cover;">
+                <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2 p-2 rounded-pill shadow-sm">
+                {{ auction.category.name }}
+            </span>
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-semibold">{{ auction.name }}</h5>
+                <p class="card-text">{{ auction.description|truncatechars:100 }}</p>
+                <small class="text-muted mb-2">Starts at: {{ auction.start_at|date:"M d, Y H:i" }}</small>
+                <a href="{% url 'upcoming_auction_detail' pk=auction.pk %}"
+                   class="btn btn-outline-secondary mt-auto w-100">
+                    Preview
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center text-muted animate__animated animate__fadeIn">
+        <p>No upcoming auctions.</p>
+    </div>
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}
